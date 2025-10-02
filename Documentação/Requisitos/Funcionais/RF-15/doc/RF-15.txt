@@ -1,0 +1,36 @@
+ID: RF-15
+Nome: Nova Prescrição
+Tipo: Funcional
+Prioridade: Alta
+
+Descrição:
+    O sistema deve permitir que profissionais de saúde autorizados criem prescrições 
+    médicas completas para pacientes, incluindo medicamentos, tratamentos e orientações.
+
+Pré-requisitos:
+
+	RF-00 (Cadastro Único de Paciente);
+
+	RF-01 (Acesso por Perfil de Usuário);
+
+	RF-08 (Prescrição Digital Integrada);
+
+Fluxo de Execução:
+
+    1.	Acessar o módulo de prescrições;
+
+    2.	Exibir formulário de nova prescrição;
+
+    3.	Selecionar paciente e preencher dados da prescrição;
+
+    4.	Validar alergias e interações medicamentosas;
+
+    5.	Adicionar itens (medicamentos/procedimentos) com dosagem e frequência;
+
+    6.	Gerar prescrição com número único e registro de auditoria;
+
+    7.	Disponibilizar prescrição para farmácia/enfermagem;
+
+Resultado Esperado:
+    Prescrições médicas padronizadas e seguras, 
+    com redução de erros de medicação e melhor rastreabilidade.

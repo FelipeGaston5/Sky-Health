@@ -1,0 +1,32 @@
+ID: RF-09
+Nome: Agendamento de Consultas e Exames
+Tipo: Funcional
+Prioridade: Média
+
+Descrição:
+    O sistema deve permitir o agendamento, reagendamento e 
+    cancelamento de consultas médicas e exames de forma integrada entre unidades de saúde, 
+    profissionais e pacientes.
+
+Pré-requisitos:
+    RF-00 (Cadastro Único de Paciente);
+    RF-01 (Acesso por perfil de usuário)
+
+Fluxo de Execução:
+
+    Paciente ou profissional acessa módulo de agendamento
+
+    Sistema exibe disponibilidade de profissionais e unidades
+
+    Usuário seleciona data, horário e profissional/unidade
+
+    Sistema confirma agendamento e gera comprovante
+
+    Envia notificação de confirmação para paciente e profissional
+
+    Permite cancelamento ou reagendamento conforme regras
+
+Resultado Esperado:
+    Agendamentos são realizados de forma ágil e organizada, 
+    com redução de filas e otimização da capacidade das unidades de saúde.
+

@@ -1,0 +1,32 @@
+ID: RF-04
+Nome: Georreferenciamento de Dados
+Tipo: Funcional
+Prioridade: Média
+
+Descrição:
+    O sistema deve exibir mapas interativos com a incidência de doenças 
+    por bairros/regiões, permitindo visualização geográfica de dados epidemiológicos 
+    para apoio à tomada de decisão.
+
+Pré-requisitos:
+    RF-00 (Cadastro Único de Paciente)
+
+Fluxo de Execução:
+
+    Usuário acessa o módulo de georreferenciamento
+
+    Sistema carrega mapa base da cidade do Recife
+
+    Usuário seleciona período de análise
+
+    Usuário seleciona tipo de doença ou indicador de saúde
+
+    Sistema processa os dados e gera visualização no mapa
+
+    Usuário visualiza a distribuição geográfica através de cores ou marcadores
+
+Resultado Esperado:
+    Mapas mostram corretamente a distribuição geográfica das doenças 
+    ou indicadores de saúde, permitindo identificação visual de áreas críticas 
+    e tendências espaciais.
+

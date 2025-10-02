@@ -1,0 +1,28 @@
+ID: RF-12
+Nome: Integração com Sistemas Externos
+Tipo: Funcional
+Prioridade: Baixa
+
+Descrição:
+    O sistema deve permitir integração com sistemas legados de hospitais e 
+    clínicas através de APIs padronizadas, facilitando a migração gradual para a plataforma 
+    SKY Health.
+
+Pré-requisitos:
+    RF-00 (Cadastro Único de Paciente);
+
+Fluxo de Execução:
+
+    Administrador configura integração com sistema externo;
+
+    Sistema valida compatibilidade e estabelece conexão;
+
+    Sincroniza dados de pacientes e profissionais;
+
+    Mantém atualização bidirecional conforme necessário;
+
+    Registra logs de integração para auditoria;
+
+Resultado Esperado:
+    Dados de sistemas legados são incorporados ao SKY Health sem perda de informação, 
+    permitindo transição gradual.

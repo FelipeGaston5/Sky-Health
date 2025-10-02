@@ -1,0 +1,28 @@
+ID: RF-13
+Nome: Backup e Recuperação de Dados
+Tipo: Funcional
+Prioridade: Alta
+
+Descrição:
+    O sistema deve realizar backups automáticos regulares e 
+    permitir recuperação de dados em caso de falhas, garantindo a integridade e 
+    disponibilidade das informações.
+
+Pré-requisitos:
+    RF-00 (Cadastro Único de Paciente)
+
+Fluxo de Execução:
+
+    Sistema agenda backups automáticos
+
+    Executa backup incremental diário e completo semanal
+
+    Armazena backups em local seguro e geograficamente distinto
+
+    Permite restauração seletiva ou completa de dados
+
+    Notifica administradores sobre status dos backups
+
+Resultado Esperado:
+    Dados críticos são protegidos contra perda e podem ser recuperados rapidamente 
+    em situações de emergência.
