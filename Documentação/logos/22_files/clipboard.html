@@ -1,0 +1,54 @@
+
+<!-- saved from url=(0037)https://bubble.io/appeditor/clipboard -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">
+var _dead = false;
+function receiveMessage(event) {
+if (_dead) { return; }
+
+if (!isOkay(event.origin)) {
+    _dead = true;
+    console.log('Note: an unrecognized domain, ' + event.origin + ', is trying to access your global Bubble editor clipboard.  If you would like to grant access, go to https://bubble.io, and in the javascript console, type client_storage.approve_global_clipboard(\'' + event.origin + '\'); and then refresh the editor window.');
+    return;
+}
+
+var parentOrigin = event.origin;
+
+if (event.data.action === 'init_sync') {
+    function handleStoragePut(event) {
+        if (!event.key) { return; }
+        if (event.key.indexOf('global_clipboard_message_') != 0) { return; }
+        if (!event.newValue) { return; }
+        var message = JSON.parse(event.newValue);
+        parent.postMessage({
+            'action': 'new_clipboard_item',
+            'key': message.key,
+            'data': message.data,
+            'timestamp': message.timestamp
+        }, parentOrigin);
+    }
+
+    window.addEventListener("storage", handleStoragePut, false);
+}
+
+if (event.data.action === 'global_clipboard_put') {
+    var message_key = 'global_clipboard_message_' + event.data.id;
+    window.localStorage[message_key] = JSON.stringify(event.data);
+    setTimeout(function() {
+        delete window.localStorage[message_key];
+    }, 10000);
+}
+}
+
+function isOkay(origin) {
+if (window.localStorage.global_clipboard_approved && JSON.parse(window.localStorage.global_clipboard_approved).indexOf(event.origin) > -1) {
+    return true;
+}
+if (/^https:\/\/([^\.]+\.)?bubble\.i[so]$/.test(origin)) {
+    return true;
+}
+return false;
+}
+
+window.addEventListener("message", receiveMessage, false);
+
+parent.postMessage({'action': 'init_me'}, '*');</script></head><body></body></html>
