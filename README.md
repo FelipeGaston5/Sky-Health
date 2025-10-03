@@ -4,10 +4,12 @@
 
 ### 👥 Autores
 
-- Felipe Tadeu Paiva Gaston
-- Júlia Vitória da Silva Fonseca
-- Giovanna Lethicia Caxias Pereira da Silva
+- Arthur 
 - Camylle Mayara Torres de Almeida
+- Felipe Tadeu Paiva Gaston
+- Giovanna Lethicia Caxias Pereira da Silva
+- Júlia Vitória da Silva Fonseca
+- Mateus Gomes Mendes
 
 ### 👩‍🏫 Orientadoras
 
