@@ -1,11 +1,162 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-10</title>
+    <title>Notificações e Alertas</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    
+    <header>
+        <div id="logo"><img src="img/10.png" alt="logo" width="80"></div>
+        <h1>Notificações e Alertas</h1>
+    </header>
+
+    <main>
+        <!-- Menu lateral fixo -->
+        <nav id="menu-lateral">
+            <h2>Perfis</h2>
+            <ul>
+                <li><a href="#" class="active" data-target="paciente">Paciente</a></li>
+                <li><a href="#" data-target="profissional">Profissional</a></li>
+                <li><a href="#" data-target="admin">Administrador</a></li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <div id="conteudo">
+            <!-- PACIENTE -->
+            <section id="paciente" class="active">
+                <h2>Centro de Notificações - Paciente</h2>
+                <p>O paciente pode visualizar alertas, lembretes e mensagens enviadas pelo sistema.</p>
+
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Mensagem</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Lembrete</td>
+                        <td>Tomar medicamento às 08:00</td>
+                        <td>05/10/2025</td>
+                        <td>Não lido</td>
+                    </tr>
+                    <tr>
+                        <td>Agendamento</td>
+                        <td>Consulta confirmada - 10/10/2025 às 09:00</td>
+                        <td>04/10/2025</td>
+                        <td>Lido</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- PROFISSIONAL -->
+            <section id="profissional">
+                <h2>Alertas para Profissional</h2>
+                <p>Visualização e confirmação de alertas e resultados de exames.</p>
+
+                <form>
+                    <label for="notificacao">Nova Notificação:</label>
+                    <textarea id="notificacao" placeholder="Digite a mensagem..."></textarea>
+
+                    <label for="tipo">Tipo de Alerta:</label>
+                    <select id="tipo">
+                        <option>Agendamento</option>
+                        <option>Resultado de Exame</option>
+                        <option>Alerta de Saúde Pública</option>
+                    </select>
+
+                    <button type="submit">Enviar Notificação</button>
+                </form>
+
+                <h3>Notificações Recebidas</h3>
+                <table>
+                    <tr>
+                        <th>Origem</th>
+                        <th>Mensagem</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Sistema</td>
+                        <td>Alerta: aumento de casos de dengue</td>
+                        <td>03/10/2025</td>
+                        <td>Não lido</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ADMINISTRADOR -->
+            <section id="admin">
+                <h2>Painel Administrativo - Notificações</h2>
+                <p>Gerenciar histórico de notificações e preferências de envio.</p>
+
+                <form>
+                    <label for="canal">Canal de Envio:</label>
+                    <select id="canal">
+                        <option>Aplicativo</option>
+                        <option>WhatsApp</option>
+                        <option>E-mail</option>
+                    </select>
+
+                    <label for="intervalo">Intervalo de Lembretes:</label>
+                    <select id="intervalo">
+                        <option>A cada 6 horas</option>
+                        <option>1 vez ao dia</option>
+                        <option>1 vez por semana</option>
+                    </select>
+
+                    <button type="submit">Salvar Preferências</button>
+                </form>
+
+                <h3>Histórico de Notificações</h3>
+                <table>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Tipo</th>
+                        <th>Canal</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>Agendamento</td>
+                        <td>App</td>
+                        <td>04/10/2025</td>
+                        <td>Entregue</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Oliveira</td>
+                        <td>Resultado de Exame</td>
+                        <td>E-mail</td>
+                        <td>05/10/2025</td>
+                        <td>Pendente</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Alternar seções do menu lateral
+        const links = document.querySelectorAll('#menu-lateral a');
+        const sections = document.querySelectorAll('section');
+
+        links.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                links.forEach(l => l.classList.remove('active'));
+                sections.forEach(sec => sec.classList.remove('active'));
+
+                link.classList.add('active');
+                document.getElementById(link.dataset.target).classList.add('active');
+            });
+        });
+    </script>
 </body>
+
 </html>
