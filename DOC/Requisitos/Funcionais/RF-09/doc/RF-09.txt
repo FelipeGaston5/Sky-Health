@@ -10,7 +10,7 @@ Descrição:
 
 Pré-requisitos:
     RF-00 (Cadastro Único de Paciente);
-    RF-01 (Acesso por perfil de usuário)
+    RF-01 (Acesso por perfil de usuário);
 
 Fluxo de Execução:
 

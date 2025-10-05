@@ -1,11 +1,124 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-09</title>
+    <title>Agendamento de Consultas e Exames</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
 </head>
+
 <body>
-    
+    <header>
+        <div id="logo"><img src="img/10.png" alt="logo" width="80"></div>
+        <h1>Agendamento de Consultas e Exames</h1>
+    </header>
+
+    <main>
+        <!-- Menu lateral fixo -->
+        <nav id="menu-lateral">
+            <h2>Perfis</h2>
+            <ul>
+                <li><a href="#" class="active" data-target="paciente">Paciente</a></li>
+                <li><a href="#" data-target="medico">Médico</a></li>
+                <li><a href="#" data-target="atendente">Atendente</a></li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <div id="conteudo">
+            <section id="paciente" class="active">
+                <h2>Agendamento - Paciente</h2>
+                <form>
+                    <label for="especialidade">Especialidade:</label>
+                    <select id="especialidade">
+                        <option>Clínico Geral</option>
+                        <option>Pediatria</option>
+                        <option>Cardiologia</option>
+                        <option>Oftalmologia</option>
+                    </select>
+
+                    <label for="data">Data:</label>
+                    <input type="date" id="data">
+
+                    <label for="horario">Horário:</label>
+                    <input type="time" id="horario">
+
+                    <label for="unidade">Unidade de Saúde:</label>
+                    <select id="unidade">
+                        <option>UBS Centro</option>
+                        <option>UBS Norte</option>
+                        <option>UBS Sul</option>
+                    </select>
+
+                    <button type="submit">Confirmar Agendamento</button>
+                </form>
+            </section>
+
+            <section id="medico">
+                <h2>Painel do Médico</h2>
+                <p>Visualização das consultas agendadas.</p>
+                <table>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>10/10/2025</td>
+                        <td>09:00</td>
+                        <td>Confirmado</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Oliveira</td>
+                        <td>11/10/2025</td>
+                        <td>13:30</td>
+                        <td>Pendente</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="atendente">
+                <h2>Atendente - Gerenciamento</h2>
+                <p>Permite reagendar, cancelar ou confirmar consultas.</p>
+                <form>
+                    <label for="id-consulta">ID da Consulta:</label>
+                    <input type="text" id="id-consulta" placeholder="Ex: 12345">
+
+                    <label for="acao">Ação:</label>
+                    <select id="acao">
+                        <option>Reagendar</option>
+                        <option>Cancelar</option>
+                        <option>Confirmar</option>
+                    </select>
+
+                    <button type="submit">Aplicar</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Alternar seções do menu lateral
+        const links = document.querySelectorAll('#menu-lateral a');
+        const sections = document.querySelectorAll('section');
+
+        links.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                links.forEach(l => l.classList.remove('active'));
+                sections.forEach(sec => sec.classList.remove('active'));
+
+                link.classList.add('active');
+                document.getElementById(link.dataset.target).classList.add('active');
+            });
+        });
+    </script>
 </body>
+
 </html>
