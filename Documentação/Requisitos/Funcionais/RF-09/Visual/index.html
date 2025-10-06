@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-09</title>
+  <meta charset="UTF-8">
+  <title>Agendamento de Consultas e Exames</title>
 </head>
 <body>
-    
+  <h2>Agendamento de Consultas e Exames</h2>
+  <form action="#" method="post">
+    <label for="paciente">Nome do Paciente:</label><br>
+    <input type="text" id="paciente" name="paciente" required><br><br>
+
+    <label for="profissional">Profissional/Especialidade:</label><br>
+    <select id="profissional" name="profissional" required>
+      <option value="clinico">Clínico Geral</option>
+      <option value="pediatria">Pediatria</option>
+      <option value="cardiologia">Cardiologia</option>
+      <option value="exame">Exame Laboratorial</option>
+    </select><br><br>
+
+    <label for="data">Data:</label><br>
+    <input type="date" id="data" name="data" required><br><br>
+
+    <label for="hora">Horário:</label><br>
+    <input type="time" id="hora" name="hora" required><br><br>
+
+    <label for="acao">Ação:</label><br>
+    <select id="acao" name="acao" required>
+      <option value="agendar">Agendar</option>
+      <option value="reagendar">Reagendar</option>
+      <option value="cancelar">Cancelar</option>
+    </select><br><br>
+
+    <input type="submit" value="Confirmar">
+  </form>
 </body>
 </html>
