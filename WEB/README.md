@@ -224,6 +224,67 @@ fetch('http://localhost:3000/pacientes', {
 
 5. CSS da área deixa tudo organizado visualmente.
 
+## Pasta `assets` – Explicação
+
+A pasta `assets/` é **onde você coloca todos os arquivos estáticos** do seu projeto web, como:
+
+- **Imagens** (`.png`, `.jpg`, `.svg`, etc.)  
+- **Fontes** (`.ttf`, `.woff`, `.woff2`)  
+- **Ícones**  
+- **Arquivos adicionais** usados no frontend (ex.: PDFs, logos, backgrounds)
+
+```text
+WEB/
+└── assets/
+    ├── images/
+    │   ├── logo.png
+    │   ├── banner.jpg
+    │   └── icones/
+    │       ├── edit.svg
+    │       └── delete.svg
+    │
+    ├── fonts/
+    │   ├── Roboto-Regular.ttf
+    │   └── OpenSans-Bold.woff2
+    │
+    └── docs/
+        └── manual.pdf
+```
+
+### Como Usar nos HTML/CSS/JS
+
+- HTML – Referenciando imagens:
+
+```
+<img src="../assets/images/logo.png" alt="Logo SkyHealth">
+```
+
+- CSS – Usando imagens de background:
+
+```
+header {
+    background: url('../assets/images/banner.jpg') no-repeat center center;
+    background-size: cover;
+}
+```
+
+- JS – Manipulando assets dinamicamente:
+
+```
+const logo = document.createElement('img');
+logo.src = '../assets/images/logo.png';
+document.body.appendChild(logo);
+```
+
+### Regras
+
+1. Sempre use caminhos relativos corretos dependendo da posição do HTML que está chamando o arquivo.
+
+2. Mantenha os arquivos organizados em subpastas (images, fonts, docs) para facilitar manutenção.
+
+3. A pasta assets/ é somente para arquivos estáticos, não coloque arquivos do backend aqui.
+
+
 ## 🔹Dicas Finais
 
 - Sempre use fetch ou bibliotecas JS como Axios para chamar a API.
