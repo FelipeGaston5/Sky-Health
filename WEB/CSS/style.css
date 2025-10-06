@@ -1,0 +1,30 @@
+:root {
+    --cor-principal: #555ede;
+    --cor-secundaria: #c5cbff;
+    --cor-texto: #333;
+    --fonte-principal: 'Roboto', sans-serif;
+    --tamanho-fonte-base: 16px;
+}
+
+body {
+    font-family: var(--fonte-principal);
+    font-size: var(--tamanho-fonte-base);
+    color: var(--cor-texto);
+    background-color: var(--cor-secundaria);
+    margin: 0;
+    padding: 0;
+}
+
+header,
+footer {
+    background-color: var(--cor-principal);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav a {
+    margin: 0 1rem;
+    color: white;
+    text-decoration: none;
+}
