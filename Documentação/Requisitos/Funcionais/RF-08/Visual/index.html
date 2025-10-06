@@ -1,11 +1,337 @@
+<!-- RF-08 - Prescrição Digital Integrada -->
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-08</title>
+  <meta charset="utf-8" />
+  <title>RF-08 — Prescrição Digital Integrada</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 18px; color:#1b1b1b; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    h1 { margin:0; font-size:20px; }
+    .card { border:1px solid #e3e3e3; padding:14px; border-radius:8px; margin-top:12px; background:#fff; }
+    label { display:block; margin-top:8px; font-size:13px; }
+    input[type="text"], input[type="email"], input[type="date"], select, textarea { width:100%; padding:8px; margin-top:6px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box; }
+    .row { display:flex; gap:10px; }
+    .row > * { flex:1; }
+    button { padding:10px 12px; border-radius:6px; border:0; background:#1767d8; color:white; cursor:pointer; margin-top:10px; }
+    button.secondary { background:#6c757d; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { padding:8px; border:1px solid #eee; text-align:left; font-size:13px; }
+    .list { margin-top:12px; }
+    .muted { color:#666; font-size:13px; }
+    .actions { display:flex; gap:8px; }
+    .chip { display:inline-block; padding:6px 8px; background:#f4f8ff; border:1px solid #deecff; border-radius:999px; font-size:12px; }
+    .success { color: #116632; font-weight:600; }
+    .danger { color:#a00; font-weight:600; }
+    .small { font-size:13px; }
+  </style>
 </head>
 <body>
-    
+  <header>
+    <h1>RF-08 — Prescrição Digital Integrada</h1>
+    <div class="muted">Sistema de gestão — Prescrições</div>
+  </header>
+
+  <section class="card" id="presc-form">
+    <label>Paciente (nome / ID)</label>
+    <input type="text" id="paciente" placeholder="Nome do paciente ou ID" autocomplete="off">
+
+    <div class="row">
+      <div>
+        <label>Médico emissor</label>
+        <input type="text" id="medico" placeholder="Nome do médico">
+      </div>
+      <div>
+        <label>CRM / Registro</label>
+        <input type="text" id="crm" placeholder="CRM ou registro profissional">
+      </div>
+    </div>
+
+    <hr style="margin:12px 0;border-color:#f0f0f0;">
+
+    <h3 style="margin:4px 0 8px 0">Adicionar medicamento</h3>
+    <div class="row">
+      <input type="text" id="med-nome" placeholder="Nome do medicamento">
+      <input type="text" id="med-dosagem" placeholder="Dosagem (ex: 500 mg)">
+    </div>
+    <label>Posologia / Observações</label>
+    <input type="text" id="med-posologia" placeholder="Ex: 1 comprimido a cada 8h - tomar com alimentos">
+
+    <div style="display:flex; gap:8px;">
+      <button id="btn-add-med">Adicionar medicamento</button>
+      <button id="btn-clear-med" class="secondary">Limpar campos</button>
+    </div>
+
+    <div class="list card" style="margin-top:12px;">
+      <strong>Lista de medicamentos</strong>
+      <table id="med-table" aria-live="polite">
+        <thead>
+          <tr><th>Nome</th><th>Dosagem</th><th>Posologia</th><th>Ações</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="empty-med" class="muted small" style="margin-top:8px">Nenhum medicamento adicionado.</div>
+    </div>
+
+    <div style="margin-top:12px">
+      <label>Observações gerais</label>
+      <textarea id="observacoes" rows="3" placeholder="Observações adicionais"></textarea>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items:center; margin-top:12px;">
+      <button id="btn-sign" title="Assinar digitalmente">Assinar digitalmente</button>
+      <div id="signed-info" class="muted small"></div>
+    </div>
+
+    <div style="display:flex; gap:8px;">
+      <button id="btn-register">Registrar e disponibilizar</button>
+      <button id="btn-send-pharm" class="secondary">Enviar para farmácia (simular)</button>
+    </div>
+
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h3>Painel de Prescrições Salvas</h3>
+    <div id="presc-list" class="small muted">Carregando...</div>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h3>Farmácia — Processar dispensação</h3>
+    <label>Código da prescrição (ex: RX-...)</label>
+    <input type="text" id="rx-code" placeholder="Cole o código da prescrição aqui">
+    <label>Nome da farmácia</label>
+    <input type="text" id="farmacia-nome" placeholder="Nome da farmácia">
+    <div style="display:flex; gap:8px;">
+      <button id="btn-processar">Processar dispensa & Registrar no histórico</button>
+      <button id="btn-view-presc" class="secondary">Ver prescrição</button>
+    </div>
+    <div id="farm-msg" class="muted small" style="margin-top:8px"></div>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h3>Histórico de dispensações</h3>
+    <div id="disp-history" class="small muted">Carregando...</div>
+  </section>
+
+<script>
+/* RF-08 — lógica front-end (simulação local via localStorage) */
+const $ = id => document.getElementById(id);
+
+let meds = [];
+const MED_TABLE_BODY = document.querySelector('#med-table tbody');
+const EMPTY_MED = $('empty-med');
+
+function renderMeds(){
+  MED_TABLE_BODY.innerHTML = '';
+  if (meds.length === 0) {
+    EMPTY_MED.style.display = 'block';
+    return;
+  }
+  EMPTY_MED.style.display = 'none';
+  meds.forEach((m, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHtml(m.nome)}</td>
+      <td>${escapeHtml(m.dosagem)}</td>
+      <td>${escapeHtml(m.posologia)}</td>
+      <td><div class="actions"><button data-i="${i}" class="remove-med secondary">Remover</button></div></td>
+    `;
+    MED_TABLE_BODY.appendChild(tr);
+  });
+  document.querySelectorAll('.remove-med').forEach(b => {
+    b.addEventListener('click', e => {
+      const i = Number(e.currentTarget.dataset.i);
+      meds.splice(i,1);
+      renderMeds();
+    });
+  });
+}
+
+function escapeHtml(text){
+  return (text||'').toString().replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});
+}
+
+$('btn-add-med').addEventListener('click', () => {
+  const nome = $('med-nome').value.trim();
+  const dosagem = $('med-dosagem').value.trim();
+  const posologia = $('med-posologia').value.trim();
+  if (!nome) { alert('Informe o nome do medicamento.'); return; }
+  meds.push({ nome, dosagem, posologia });
+  renderMeds();
+  $('med-nome').value = $('med-dosagem').value = $('med-posologia').value = '';
+});
+
+$('btn-clear-med').addEventListener('click', () => {
+  $('med-nome').value = $('med-dosagem').value = $('med-posologia').value = '';
+});
+
+/* assinaturas / salvar / enviar */
+let currentSignature = null;
+
+$('btn-sign').addEventListener('click', () => {
+  if (meds.length === 0) { alert('Adicione pelo menos um medicamento antes de assinar.'); return; }
+  const medico = $('medico').value.trim();
+  if (!medico) {
+    const ok = confirm('Ainda sem nome do médico. Deseja continuar assinando sem preencher o nome agora?');
+    if (!ok) return;
+  }
+  // simula assinatura digital
+  const signer = medico || prompt('Digite o nome do profissional para assinatura (simulado):') || 'Médico não informado';
+  currentSignature = `${signer} — Assinado em ${new Date().toLocaleString()}`;
+  $('signed-info').textContent = currentSignature;
+  $('btn-sign').textContent = 'Assinado ✓';
+  $('btn-sign').disabled = true;
+});
+
+function loadArray(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; } }
+function saveArray(key, arr){ localStorage.setItem(key, JSON.stringify(arr)); }
+
+$('btn-register').addEventListener('click', () => {
+  const paciente = $('paciente').value.trim();
+  if (!paciente) { alert('Informe o paciente.'); return; }
+  if (meds.length === 0) { alert('Adicione ao menos um medicamento.'); return; }
+  if (!currentSignature) { if (!confirm('Prescrição ainda não assinada. Deseja salvar mesmo assim?')) return; }
+  const id = 'RX-' + Date.now().toString();
+  const presc = {
+    id,
+    paciente,
+    medico: $('medico').value.trim(),
+    crm: $('crm').value.trim(),
+    medicamentos: meds.slice(),
+    observacoes: $('observacoes').value.trim(),
+    signature: currentSignature,
+    sentToPharmacy: false,
+    dispensed: false,
+    createdAt: new Date().toISOString()
+  };
+  const arr = loadArray('prescriptions');
+  arr.unshift(presc);
+  saveArray('prescriptions', arr);
+  // limpar formulário parcialmente (mas mantém histórico de meds para revisão)
+  meds = [];
+  renderMeds();
+  $('paciente').value = $('observacoes').value = $('medico').value = $('crm').value = '';
+  currentSignature = null;
+  $('signed-info').textContent = '';
+  $('btn-sign').disabled = false;
+  $('btn-sign').textContent = 'Assinar digitalmente';
+  renderPrescriptions();
+  alert('Prescrição registrada com sucesso! Código: ' + id);
+});
+
+$('btn-send-pharm').addEventListener('click', () => {
+  // pega última prescrição registrada (simulação) e marca enviada
+  const arr = loadArray('prescriptions');
+  if (!arr || arr.length === 0) { alert('Não há prescrições registradas para enviar.'); return; }
+  const presc = arr[0];
+  if (presc.sentToPharmacy) { alert('Prescrição já enviada anteriormente.'); return; }
+  presc.sentToPharmacy = true;
+  presc.sentAt = new Date().toISOString();
+  arr[0] = presc;
+  saveArray('prescriptions', arr);
+  renderPrescriptions();
+  alert('Prescrição ' + presc.id + ' enviada para farmácia (simulação).');
+});
+
+/* painel de prescrições */
+function renderPrescriptions(){
+  const arr = loadArray('prescriptions');
+  const container = $('presc-list');
+  if (!arr || arr.length === 0) { container.innerHTML = '<div class="muted small">Nenhuma prescrição registrada.</div>'; return; }
+  let html = '<table><thead><tr><th>Código</th><th>Paciente</th><th>Médico</th><th>Criado</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+  arr.forEach(p => {
+    const status = (p.dispensed ? '<span class="chip">Dispensada</span>' : p.sentToPharmacy ? '<span class="chip">Enviada</span>' : '<span class="chip">Registrada</span>');
+    html += `<tr>
+      <td>${p.id}</td>
+      <td>${escapeHtml(p.paciente)}</td>
+      <td>${escapeHtml(p.medico || '')}</td>
+      <td>${new Date(p.createdAt).toLocaleString()}</td>
+      <td>${status}</td>
+      <td>
+        <div class="actions">
+          <button data-id="${p.id}" class="view-presc">Ver</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+  container.querySelectorAll('.view-presc').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = b.dataset.id;
+      viewPrescription(id);
+    });
+  });
+}
+
+/* ver prescrição em modal simples (alert) */
+function viewPrescription(id){
+  const arr = loadArray('prescriptions');
+  const p = arr.find(x => x.id === id);
+  if (!p) { alert('Prescrição não encontrada.'); return; }
+  let text = `Código: ${p.id}\nPaciente: ${p.paciente}\nMédico: ${p.medico || '-'}\nCRM: ${p.crm || '-'}\nCriado: ${new Date(p.createdAt).toLocaleString()}\n\nMedicamentos:\n`;
+  p.medicamentos.forEach((m,i) => text += `${i+1}. ${m.nome} — ${m.dosagem || '-'} — ${m.posologia || '-'}\n`);
+  text += `\nObservações: ${p.observacoes || '-'}\n\nAssinatura: ${p.signature || 'Não assinada'}\nStatus: ${p.dispensed ? 'Dispensada' : p.sentToPharmacy ? 'Enviada à farmácia' : 'Registrada'}`;
+  alert(text);
+}
+
+/* farmácia processar dispensação */
+$('btn-processar').addEventListener('click', () => {
+  const code = $('rx-code').value.trim();
+  const farm = $('farmacia-nome').value.trim();
+  if (!code) { alert('Informe o código da prescrição.'); return; }
+  if (!farm) { alert('Informe o nome da farmácia.'); return; }
+  let arr = loadArray('prescriptions');
+  const idx = arr.findIndex(x => x.id === code);
+  if (idx === -1) { $('farm-msg').textContent = 'Prescrição não encontrada.'; return; }
+  const presc = arr[idx];
+  if (presc.dispensed) { $('farm-msg').textContent = 'Prescrição já está marcada como dispensada.'; return; }
+  presc.dispensed = true;
+  presc.dispensedAt = new Date().toISOString();
+  presc.dispensedBy = farm;
+  arr[idx] = presc;
+  saveArray('prescriptions', arr);
+
+  // adicionar ao histórico de dispensações
+  const history = loadArray('dispHistory');
+  history.unshift({
+    rx: presc.id,
+    paciente: presc.paciente,
+    farmacia: farm,
+    data: presc.dispensedAt
+  });
+  saveArray('dispHistory', history);
+
+  $('farm-msg').textContent = 'Dispensação registrada com sucesso.';
+  renderPrescriptions();
+  renderDispHistory();
+});
+
+/* ver prescrição botão */
+$('btn-view-presc').addEventListener('click', () => {
+  const code = $('rx-code').value.trim();
+  if (!code) { alert('Cole o código no campo acima para visualizar.'); return; }
+  viewPrescription(code);
+});
+
+/* histórico */
+function renderDispHistory(){
+  const arr = loadArray('dispHistory');
+  const el = $('disp-history');
+  if (!arr || arr.length === 0) { el.innerHTML = '<div class="muted small">Nenhuma dispensação registrada.</div>'; return; }
+  let html = '<table><thead><tr><th>RX</th><th>Paciente</th><th>Farmácia</th><th>Data</th></tr></thead><tbody>';
+  arr.forEach(r => {
+    html += `<tr><td>${r.rx}</td><td>${escapeHtml(r.paciente)}</td><td>${escapeHtml(r.farmacia)}</td><td>${new Date(r.data).toLocaleString()}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+/* inicializa dados */
+renderMeds();
+renderPrescriptions();
+renderDispHistory();
+</script>
 </body>
 </html>
