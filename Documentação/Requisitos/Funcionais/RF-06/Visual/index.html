@@ -1,11 +1,198 @@
-<!DOCTYPE html>
-<html lang="PT-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-06</title>
-</head>
-<body>
-    
-</body>
-</html>
+-- Criar enum para perfis de usuário
+CREATE TYPE public.user_role AS ENUM ('admin', 'medico', 'enfermeiro', 'recepcionista');
+
+-- Criar enum para níveis de permissão
+CREATE TYPE public.permission_level AS ENUM ('nenhum', 'leitura', 'escrita', 'total');
+
+-- Tabela de perfis de usuário
+CREATE TABLE public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  nome_completo TEXT NOT NULL,
+  email TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Tabela de funções de usuário
+CREATE TABLE public.user_roles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  role public.user_role NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, role)
+);
+
+-- Tabela de permissões de módulos
+CREATE TABLE public.module_permissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  role public.user_role NOT NULL,
+  module_name TEXT NOT NULL,
+  permission_level public.permission_level NOT NULL DEFAULT 'nenhum',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(role, module_name)
+);
+
+-- Tabela de logs de acesso
+CREATE TABLE public.access_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+  module_name TEXT NOT NULL,
+  action TEXT NOT NULL,
+  authorized BOOLEAN NOT NULL,
+  ip_address TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Habilitar RLS
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.module_permissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.access_logs ENABLE ROW LEVEL SECURITY;
+
+-- Função para obter a role do usuário
+CREATE OR REPLACE FUNCTION public.get_user_role(user_uuid UUID)
+RETURNS public.user_role
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT role FROM public.user_roles WHERE user_id = user_uuid LIMIT 1;
+$$;
+
+-- Função para verificar se usuário tem role específica
+CREATE OR REPLACE FUNCTION public.has_role(user_uuid UUID, required_role public.user_role)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS(
+    SELECT 1 FROM public.user_roles
+    WHERE user_id = user_uuid AND role = required_role
+  );
+$$;
+
+-- Políticas RLS para profiles
+CREATE POLICY "Usuários podem ver seu próprio perfil"
+  ON public.profiles FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "Admins podem ver todos os perfis"
+  ON public.profiles FOR SELECT
+  USING (public.has_role(auth.uid(), 'admin'));
+
+CREATE POLICY "Usuários podem atualizar seu próprio perfil"
+  ON public.profiles FOR UPDATE
+  USING (auth.uid() = id);
+
+-- Políticas RLS para user_roles
+CREATE POLICY "Usuários podem ver suas próprias roles"
+  ON public.user_roles FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins podem ver todas as roles"
+  ON public.user_roles FOR SELECT
+  USING (public.has_role(auth.uid(), 'admin'));
+
+CREATE POLICY "Admins podem gerenciar roles"
+  ON public.user_roles FOR ALL
+  USING (public.has_role(auth.uid(), 'admin'));
+
+-- Políticas RLS para module_permissions
+CREATE POLICY "Todos podem ver permissões de módulos"
+  ON public.module_permissions FOR SELECT
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Admins podem gerenciar permissões"
+  ON public.module_permissions FOR ALL
+  USING (public.has_role(auth.uid(), 'admin'));
+
+-- Políticas RLS para access_logs
+CREATE POLICY "Usuários podem ver seus próprios logs"
+  ON public.access_logs FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins podem ver todos os logs"
+  ON public.access_logs FOR SELECT
+  USING (public.has_role(auth.uid(), 'admin'));
+
+CREATE POLICY "Sistema pode inserir logs"
+  ON public.access_logs FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+-- Trigger para atualizar updated_at
+CREATE OR REPLACE FUNCTION public.update_updated_at()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER update_profiles_updated_at
+  BEFORE UPDATE ON public.profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION public.update_updated_at();
+
+-- Trigger para criar perfil automaticamente
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, nome_completo, email)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'nome_completo', 'Usuário'),
+    NEW.email
+  );
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_new_user();
+
+-- Inserir permissões padrão para cada módulo
+INSERT INTO public.module_permissions (role, module_name, permission_level) VALUES
+  -- Admin: acesso total a tudo
+  ('admin', 'pacientes', 'total'),
+  ('admin', 'prontuarios', 'total'),
+  ('admin', 'exames', 'total'),
+  ('admin', 'medicamentos', 'total'),
+  ('admin', 'relatorios', 'total'),
+  ('admin', 'usuarios', 'total'),
+  
+  -- Médico: acesso completo a dados clínicos
+  ('medico', 'pacientes', 'escrita'),
+  ('medico', 'prontuarios', 'total'),
+  ('medico', 'exames', 'total'),
+  ('medico', 'medicamentos', 'escrita'),
+  ('medico', 'relatorios', 'leitura'),
+  ('medico', 'usuarios', 'leitura'),
+  
+  -- Enfermeiro: acesso intermediário
+  ('enfermeiro', 'pacientes', 'leitura'),
+  ('enfermeiro', 'prontuarios', 'escrita'),
+  ('enfermeiro', 'exames', 'leitura'),
+  ('enfermeiro', 'medicamentos', 'leitura'),
+  ('enfermeiro', 'relatorios', 'nenhum'),
+  ('enfermeiro', 'usuarios', 'nenhum'),
+  
+  -- Recepcionista: acesso limitado
+  ('recepcionista', 'pacientes', 'escrita'),
+  ('recepcionista', 'prontuarios', 'nenhum'),
+  ('recepcionista', 'exames', 'nenhum'),
+  ('recepcionista', 'medicamentos', 'nenhum'),
+  ('recepcionista', 'relatorios', 'nenhum'),
+  ('recepcionista', 'usuarios', 'nenhum');
