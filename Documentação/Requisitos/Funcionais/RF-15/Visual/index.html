@@ -1,11 +1,131 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requisito Funcional RF-15</title>
+    <title>Nova Prescrição</title>
+    <style>
+        body {
+            font-family: Merriweather, Regular 400;
+            background-color: hwb(209 62% 2%);
+            margin: 20px;
+            color: hsl(0, 0%, 0%);
+        }
+        h1 {
+            color: hsl(205, 86%, 25%);
+            text-align: center;
+        }
+        form {
+            background-color: hsl(0, 0%, 100%);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 1000px;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: hsl(205, 86%, 25%);
+        }
+        input[type="text"], textarea, select{
+            width: 94%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid hsl(0, 0%, 80%);
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 94%;
+            height: 120px;
+            resize: none;
+            padding: 8px;
+            font-size: 14px;
+        }
+        select {
+            width: 94%;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid hsl(0, 0%, 80%);
+            font-size: 14px;
+        }
+        button {
+            background-color: hsl(209, 78%, 70%);
+            color: hsl(205, 86%, 25%);
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: hsl(205, 86%, 25%);
+            color: hsl(0, 0%, 100%);
+        }
+        #notificaco {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: hsl(0, 0%, 100%);
+            box-shadow: 0 0 10px hsl(0, 0%, 100%);
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        #notificacao.show {
+            display: block;
+            opacity: 1;
+            transform: translate(0);
+        }
+</style>
 </head>
 <body>
-    
+    <h1>Nova Prescrição</h1>
+    <form>
+        <label for="paciente">PACIENTE:</label>
+        <input type="text" id="paciente" name="paciente" placeholder="Digite o nome do paciente">
+        <label for="descricao">DESCRIÇÃO DA PRESCRIÇÃO:</label>
+        <textarea id="descricao" name="descricao" rows="4" placeholder="Digite medicamentos, tratamentos e orientações"></textarea>
+        <label for="prioridade">PRIORIDADE:</label>
+        <select id="prioridade" name="prioridade">
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+        </select>
+        <label for="itens">ITENS(MEDICAMENTOS/PROCEDIMENTOS):</label>
+        <textarea id="itens" name="itens" rows="4" placeholder="Nome,dosagem,frequência"></textarea>
+        <p></p>
+        <button type="button" onclick="gerarPrescricao()">Gerar Prescrição</button>
+    </form>
+
+    <div id="notificacao"></div>
+
+    <script>
+        function gerarPrescricao() {
+            const paciente = document.getElementById("paciente").value.trim();
+
+            if (!paciente) {
+              mostrarNotificacao("Por favor, selecione ou digite o nome do paciente antes de gerar a prescrição", "hsl(0, 66%, 29%)");
+            } else {
+              mostrarNotificacao("Prescrição realizada para " + paciente + "!", "hsl(120, 70%, 30%)");
+            }
+        }
+
+        function mostrarNotificacao(mensagem, cor) {
+            const notif = document.getElementById("notificacao");
+            notif.textContent = mensagem;
+            notif.style.backgroundColor = cor;
+            notif.style.display = "block";
+
+            setTimeout(() => {
+                notif.style.display = "none";
+            }, 3000);
+        }
+        </script>
 </body>
 </html>
