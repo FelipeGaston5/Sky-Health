@@ -70,3 +70,19 @@ routes.delete('/medicos/:id', async (req, res) => {
 });
 
 module.exports = routes;
+
+// Endpoint de login (médicos)
+routes.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body || {};
+        if (!username || !password) {
+            return res.status(400).json({ message: 'username e password são obrigatórios' });
+        }
+        const user = await Medico.findOne({ username: String(username).toLowerCase(), password: String(password) });
+        if (!user) return res.status(401).json({ message: 'Credenciais inválidas' });
+        const { password: _p, __v, ...safe } = user.toObject();
+        res.json({ message: 'Login OK', medico: safe });
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro no login', erro });
+    }
+});

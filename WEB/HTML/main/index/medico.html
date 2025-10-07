@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Área do Médico - Sky Health</title>
+    <link rel="stylesheet" href="../../../CSS/style.css" />
+    <link rel="stylesheet" href="../../../CSS/main/index/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                <h1>Área do Médico</h1>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="dashboard-card">
+            <div class="dashboard-layout">
+                <aside class="sidebar card">
+                    <div class="card-header">
+                        <h3>Menu</h3>
+                    </div>
+                    <nav class="side-nav tabs">
+                        <button data-tab="agendamentos" class="active">Agendamentos</button>
+                        <button data-tab="notificacoes">Notificações</button>
+                        <button data-tab="prescricao">Nova Prescrição</button>
+                        <button data-tab="novo-agendamento">Novo Agendamento</button>
+                    </nav>
+                </aside>
+                <section class="content card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Painel do Médico</h2>
+                            <small id="medico-info" class="muted">—</small>
+                        </div>
+                        <div class="inline">
+                            <a class="btn btn-secondary" href="../../users/medico.html">Meu Perfil</a>
+                            <button id="ag-refresh" class="btn btn-secondary" type="button">Atualizar</button>
+                        </div>
+                    </div>
+                    <div class="page-title">
+                        <h2 id="page-section-title">Agendamentos</h2>
+                        <p class="muted">Gerencie seus atendimentos e documentos em um só lugar.</p>
+                    </div>
+                    <div class="patient-form">
+                        <section id="tab-agendamentos" class="tab-panel active">
+                            <h4 class="section-title">Resumo de agendamentos</h4>
+                            <div class="panel-header">
+                                <h3>Seus Agendamentos</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="ag-filter-status">Filtrar por status</label>
+                                        <select id="ag-filter-status">
+                                            <option value="">Todos</option>
+                                            <option value="Agendado">Agendado</option>
+                                            <option value="Realizado">Realizado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ag-search">Buscar por nome, tipo ou data</label>
+                                        <input id="ag-search" type="search" placeholder="Paciente, tipo..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="list">
+                                <thead>
+                                    <tr>
+                                        <th>Paciente</th>
+                                        <th>Tipo</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ag-list">
+                                    <tr class="empty-state">
+                                        <td colspan="4">Carregando…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+
+                        <section id="tab-notificacoes" class="tab-panel">
+                            <div class="panel-header">
+                                <h3>Notificações</h3>
+                            </div>
+                            <div class="empty-state-card">
+                                <p>Nenhuma notificação no momento.</p>
+                                <small class="muted">Quando houver atualizações de agendamentos ou prescrições, elas
+                                    aparecem aqui.</small>
+                                <h4 class="section-title">Central de notificações</h4>
+                            </div>
+                        </section>
+
+                        <section id="tab-prescricao" class="tab-panel">
+                            <div class="panel-header">
+                                <h3>Nova Prescrição</h3>
+                            </div>
+                            <form id="form-pres" class="form-section">
+                                <h4 class="section-title">Criar nova prescrição</h4>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <h5 class="group-title">Identificação</h5>
+                                        <label for="presPacienteCpf" class="required">CPF do Paciente</label>
+                                        <input id="presPacienteCpf" type="text" placeholder="000.000.000-00"
+                                            maxlength="14" />
+                                        <small class="form-hint">CPF do paciente (aceita números com ou sem
+                                            máscara).</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="presMedicoCrm" class="required">CRM do médico</label>
+                                        <input id="presMedicoCrm" type="text" placeholder="CRM" />
+                                        <small class="form-hint">Preenchido automaticamente se disponível.</small>
+                                    </div>
+                                </div>
+                                <h5 class="group-title">Detalhes</h5>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="presTipo" class="required">Tipo de documento</label>
+                                        <select id="presTipo">
+                                            <option value="Receituário">Receituário</option>
+                                            <option value="Atestado">Atestado</option>
+                                            <option value="Outros">Outros</option>
+                                            <option value="exames">exames</option>
+                                        </select>
+                                        <small class="form-hint">Selecione o tipo de documento da prescrição.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="presValidade" class="required">Validade da prescrição</label>
+                                        <input id="presValidade" type="date" />
+                                        <small class="form-hint">Deve ser maior que a data de emissão.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="presDesc" class="required">Detalhes da prescrição</label>
+                                    <textarea id="presDesc" rows="4"
+                                        placeholder="Orientações, medicamentos, etc."></textarea>
+                                    <small class="form-hint">Inclua posologia e observações relevantes.</small>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Criar Prescrição</button>
+                                </div>
+                            </form>
+                            <div id="pres-result" class="alert success" style="display:none;"></div>
+                        </section>
+
+                        <h4 class="section-title">Criar novo agendamento</h4>
+                        <section id="tab-novo-agendamento" class="tab-panel">
+                            <div class="panel-header">
+                                <h5 class="group-title">Participantes</h5>
+                                <h3>Novo Agendamento</h3>
+                            </div>
+                            <form id="form-ag" class="form-section">
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="agPacienteCpf" class="required">CPF do paciente</label>
+                                        <input id="agPacienteCpf" type="text" placeholder="000.000.000-00"
+                                            maxlength="14" />
+                                        <small class="form-hint">Digite o CPF do paciente (com ou sem máscara).</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agMedicoCrm" class="required">CRM do médico</label>
+                                        <input id="agMedicoCrm" type="text" placeholder="CRM" />
+                                        <h5 class="group-title">Agendamento</h5>
+                                        <small class="form-hint">Preenchido automaticamente se disponível.</small>
+                                    </div>
+                                </div>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="agData" class="required">Data e hora do agendamento</label>
+                                        <small class="form-hint">Escolha a data e a hora da consulta ou exame.</small>
+                                        <input id="agData" type="datetime-local" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agTipo" class="required">Tipo de agendamento</label>
+                                        <select id="agTipo">
+                                            <option value="Consulta">Consulta</option>
+                                            <option value="Exame">Exame</option>
+                                        </select>
+                                        <small class="form-hint">Selecione o tipo de atendimento.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="agObs">Observações (opcional)</label>
+                                    <textarea id="agObs" rows="3" placeholder="Observações"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Criar Agendamento</button>
+                                </div>
+                            </form>
+                            <div id="ag-result" class="alert success" style="display:none;"></div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-fixed">
+        <div class="footer-content">
+            <p>Área do Médico</p>
+        </div>
+    </footer>
+
+    <script src="../../../JS/script.js"></script>
+    <script src="../../../JS/main/medico-dashboard.js"></script>
+</body>
+
+</html>

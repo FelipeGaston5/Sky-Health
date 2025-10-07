@@ -1,0 +1,179 @@
+/* Estilos modernos para páginas de autenticação (login) */
+:root {
+    --auth-max: 980px;
+}
+
+.auth-page header {
+    padding: 1rem;
+}
+
+.auth-page header .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: var(--auth-max);
+    margin: 0 auto;
+}
+
+.auth-page .logo {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.auth-page .logo-icon {
+    background-image: url('../../assets/img/logos/claro.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+    width: 360px;
+    height: 120px;
+}
+
+/* Troca de logo no modo escuro especificamente para a página de autenticação */
+body.dark-mode.auth-page .logo-icon {
+    background-image: url('../../assets/img/logos/escuro.png');
+}
+
+/* Responsividade da logo no login */
+@media (max-width: 720px) {
+    .auth-page .logo-icon {
+        width: 320px;
+        height: 106px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-page .logo-icon {
+        width: 260px;
+        height: 86px;
+    }
+}
+
+.auth-page main {
+    max-width: var(--auth-max);
+    margin: 1rem auto 3rem;
+    padding: 0 1rem;
+}
+
+.auth-card {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.auth-card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.auth-card .card-header h2 {
+    margin: 0;
+}
+
+/* Aparência base do cartão (similar ao restante do sistema) */
+.auth-page .card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, .06);
+}
+
+.auth-page .auth-card form {
+    padding: 1rem;
+}
+
+/* Layout básico de formulário */
+.auth-page .form-section {
+    margin: .5rem 0;
+}
+
+.auth-page .form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.auth-page .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 220px;
+}
+
+.auth-page .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+    padding: 1rem;
+}
+
+/* Inputs e botões modernos (harmonizados com a paleta global) */
+.auth-page .form-group input,
+.auth-page .form-group select,
+.auth-page .form-group textarea {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: .7rem .75rem;
+    background: var(--light-gray);
+    color: var(--dark);
+}
+
+.auth-page .form-group input:focus,
+.auth-page .form-group select:focus,
+.auth-page .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, .15);
+}
+
+.auth-page .btn {
+    border-radius: 999px;
+    padding: .75rem 1.1rem;
+    transition: transform .15s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+}
+
+.auth-page .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(2, 6, 23, .10);
+}
+
+.auth-page .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(2, 6, 23, .10);
+}
+
+.auth-page .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border: 1px solid var(--primary);
+}
+
+body.dark-mode .auth-page .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* Variante secundária para links/botões claros no header */
+.auth-page .btn-secondary {
+    background: var(--light);
+    color: var(--dark);
+    border: 1px solid var(--border);
+}
+
+body.dark-mode .auth-page .btn-secondary {
+    background: var(--color-surface);
+    color: var(--light);
+    border-color: var(--color-border);
+}
+
+/* Auxiliares */
+.auth-page .muted {
+    color: var(--gray);
+}
+
+.auth-page footer {
+    text-align: center;
+    padding: 1rem 0;
+}

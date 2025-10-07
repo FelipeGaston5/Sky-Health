@@ -1,0 +1,9 @@
+/* Estilos específicos da página de cadastro de médicos */
+/* Reaproveita tokens de styles-cadastro.css */
+
+/* Espaçamento opcional do conteúdo do modal em telas pequenas */
+@media (max-width: 480px) {
+    .modal-content {
+        width: min(96%, 520px);
+    }
+}

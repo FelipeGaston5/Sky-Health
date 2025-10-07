@@ -1,6 +1,7 @@
 // === IMPORTAÇÕES ===
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // === IMPORTAÇÃO DAS ROTAS ===
 const userRoutes = require('./routes/users');
@@ -13,6 +14,7 @@ const agendRoutes = require('./routes/agendamentos');
 // === CONFIGURAÇÕES DO EXPRESS ===
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // === CONEXÃO COM O MONGODB ATLAS ===
 const uri = "mongodb+srv://FelipeGaston:Pca0e11%2A@sky-health.x4q5bub.mongodb.net/SkyHealth";

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Área do Paciente - Sky Health</title>
+    <link rel="stylesheet" href="../../../CSS/style.css" />
+    <link rel="stylesheet" href="../../../CSS/main/index/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                <h1>Área do Paciente</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-card">
+            <div class="dashboard-layout">
+                <aside class="sidebar card">
+                    <div class="card-header">
+                        <h3>Menu</h3>
+                    </div>
+                    <nav class="side-nav tabs">
+                        <button data-tab="prescricoes" class="active">Minhas Prescrições</button>
+                        <button data-tab="agendamentos">Meus Agendamentos</button>
+                        <button data-tab="notificacoes">Notificações</button>
+                    </nav>
+                </aside>
+                <section class="content card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Painel do Paciente</h2>
+                            <small id="paciente-info" class="muted">—</small>
+                        </div>
+                        <div class="inline">
+                            <a class="btn btn-secondary" href="../../users/paciente.html">Meu Perfil</a>
+                            <button id="btn-refresh" class="btn btn-secondary" type="button">Atualizar</button>
+                        </div>
+                    </div>
+                    <div class="page-title">
+                        <h2 id="page-section-title">Minhas Prescrições</h2>
+                        <p class="muted">Acompanhe suas prescrições, agendamentos e notificações.</p>
+                    </div>
+                    <div class="patient-form">
+                        <section id="tab-prescricoes" class="tab-panel active">
+                            <h4 class="section-title">Prescrições emitidas</h4>
+                            <div class="panel-header">
+                                <h3>Lista de Prescrições</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="pres-search">Buscar</label>
+                                        <input id="pres-search" type="search" placeholder="Tipo, CRM, descrição..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="list">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Médico (CRM)</th>
+                                        <th>Validade</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pres-list">
+                                    <tr class="empty-state">
+                                        <td colspan="4">Carregando…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="pres-msg" class="alert success" style="display:none;"></div>
+                        </section>
+
+                        <section id="tab-agendamentos" class="tab-panel">
+                            <h4 class="section-title">Próximos atendimentos</h4>
+                            <div class="panel-header">
+                                <h3>Meus Agendamentos</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="ag-filter-status">Filtrar por status</label>
+                                        <select id="ag-filter-status">
+                                            <option value="">Todos</option>
+                                            <option value="Agendado">Agendado</option>
+                                            <option value="Realizado">Realizado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ag-search">Buscar</label>
+                                        <input id="ag-search" type="search" placeholder="Médico, tipo, data..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="list">
+                                <thead>
+                                    <tr>
+                                        <th>Médico</th>
+                                        <th>Tipo</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ag-list">
+                                    <tr class="empty-state">
+                                        <td colspan="4">Carregando…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+
+                        <section id="tab-notificacoes" class="tab-panel">
+                            <h4 class="section-title">Central de notificações</h4>
+                            <div class="panel-header">
+                                <h3>Notificações</h3>
+                            </div>
+                            <div class="empty-state-card">
+                                <p>Nenhuma notificação no momento.</p>
+                                <small class="muted">Eventos importantes serão exibidos aqui.</small>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-fixed">
+        <div class="footer-content">
+            <p>Área do Paciente</p>
+        </div>
+    </footer>
+
+    <script src="../../../JS/script.js"></script>
+    <script src="../../../JS/link/paciente.js"></script>
+    <script src="../../../JS/link/medico.js"></script>
+    <script src="../../../JS/main/paciente-dashboard.js"></script>
+</body>
+
+</html>

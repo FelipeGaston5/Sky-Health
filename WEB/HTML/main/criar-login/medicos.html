@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Médico - Sky Health</title>
+    <link rel="stylesheet" href="../../../CSS/style.css" />
+    <link rel="stylesheet" href="../../../CSS/main/styles-cadastro.css" />
+    <nav>
+
+    </nav>
+    <link rel="stylesheet" href="../../../CSS/main/style-medico.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                </div>
+                <nav>
+                    
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Formulário</h2>
+                    <span class="required-info">* Campos obrigatórios</span>
+                </div>
+
+                <form id="doctor-form" class="patient-form" novalidate>
+                    <fieldset class="form-section">
+                        <legend>Dados Pessoais</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName" class="required">Nome completo</label>
+                                <input type="text" id="fullName" name="fullName" required placeholder="Nome completo" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="birthDate" class="required">Data de nascimento</label>
+                                <input type="date" id="birthDate" name="birthDate" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf" class="required">CPF</label>
+                                <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00"
+                                    maxlength="14" inputmode="numeric" autocomplete="off" />
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gênero</label>
+                                <select id="gender" name="gender">
+                                    <option value="">Selecione</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-section">
+                        <legend>Contato e Endereço</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone" class="required">Telefone</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="(00) 00000-0000"
+                                    maxlength="15" inputmode="numeric" />
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="required">E-mail</label>
+                                <div class="email-input-group">
+                                    <input type="email" id="email" name="email" required placeholder="usuario" />
+                                    <select id="emailDomain" aria-label="Domínio do e-mail">
+                                        <option value="">@domínio</option>
+                                        <option value="@gmail.com">@gmail.com</option>
+                                        <option value="@hotmail.com">@hotmail.com</option>
+                                        <option value="@outlook.com">@outlook.com</option>
+                                        <option value="@yahoo.com">@yahoo.com</option>
+                                        <option value="@live.com">@live.com</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="street" class="required">Rua</label>
+                                <input type="text" id="street" name="street" required placeholder="Rua"
+                                    autocomplete="address-line1" />
+                            </div>
+                            <div class="form-group">
+                                <label for="number">Número</label>
+                                <input type="text" id="number" name="number" placeholder="Número"
+                                    autocomplete="address-line2" />
+                            </div>
+                            <div class="form-group">
+                                <label for="neighborhood">Bairro</label>
+                                <input type="text" id="neighborhood" name="neighborhood" placeholder="Bairro" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zipCode">CEP</label>
+                                <input type="text" id="zipCode" name="zipCode" placeholder="00000-000" maxlength="9"
+                                    inputmode="numeric" />
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Cidade</label>
+                                <input type="text" id="city" name="city" placeholder="Cidade" />
+                            </div>
+                            <div class="form-group">
+                                <label for="state">Estado</label>
+                                <select id="state" name="state">
+                                    <option value="">Selecione</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-section">
+                        <legend>Dados Profissionais</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="crm" class="required">CRM</label>
+                                <input type="text" id="crm" name="crm" required placeholder="CRM" />
+                            </div>
+                            <div class="form-group">
+                                <label for="specialty" class="required">Especialidade</label>
+                                <input type="text" id="specialty" name="specialty" required
+                                    placeholder="Ex.: Cardiologia" />
+                            </div>
+                            <div class="form-group">
+                                <label for="experienceYears">Experiência (anos)</label>
+                                <input type="number" id="experienceYears" name="experienceYears" min="0" step="1"
+                                    placeholder="Ex.: 10" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="affiliatedHospitals">Hospitais afiliados</label>
+                                <input type="text" id="affiliatedHospitals" name="affiliatedHospitals"
+                                    placeholder="Separe com vírgulas" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" id="btn-clear">Limpar Formulário</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submit">
+                            <span class="btn-icon">✓</span>
+                            Cadastrar Médico
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="success-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Cadastro Realizado com Sucesso!</h3>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="success-icon">✓</div>
+                        <p>O médico foi cadastrado com sucesso no sistema.</p>
+                        <div class="patient-info">
+                            <strong>ID do Médico:</strong> <span id="doctor-id"></span><br />
+                            <strong>Nome:</strong> <span id="doctor-name"></span><br />
+                            <strong>CPF:</strong> <span id="doctor-cpf"></span><br />
+                            <strong>CRM:</strong> <span id="doctor-crm"></span><br />
+                            <strong>Username:</strong> <span id="doctor-username"></span><br />
+                            <strong>Password:</strong> <span id="doctor-password"></span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-secondary" id="btn-new-doctor">Novo Cadastro</button>
+                        <button class="btn btn-primary" id="btn-view-list">Ver Lista de Médicos</button>
+                        <a class="btn btn-primary" id="btn-my-account" href="../../users/medico.html">Minha Conta</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Cadastro de Médicos</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../../../JS/script.js"></script>
+    <script src="../../../JS/link/medico.js"></script>
+    <script src="../../../JS/main/cadastro-medico.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+main {
+    max-width: 900px;
+}
+
+.account-card {
+    margin-top: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}

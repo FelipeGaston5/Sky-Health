@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administradores - Lista</title>
+    <link rel="stylesheet" href="../../CSS/style.css" />
+    <style>
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid var(--borda, #ddd);
+            padding: .5rem .6rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-card, #f7f7f7);
+        }
+
+        .actions {
+            display: flex;
+            gap: .4rem;
+        }
+    </style>
+    <script>
+        // Evita FOUC em dark-mode
+        (function () { try { if (localStorage.getItem('skyhealth:theme') === 'dark') document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-mode')); } catch (_) { } })();
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>Administradores</h1>
+    </header>
+    <main>
+        <p>
+            <a class="btn btn-primary" href="../main/criar-login/adm.html">+ Novo Administrador</a>
+        </p>
+        <div class="card">
+            <div class="card-header">
+                <h2>Lista</h2>
+            </div>
+            <div class="patient-form">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Cargo</th>
+                            <th>Criado em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adm-table-body">
+                        <tr>
+                            <td colspan="5">Carregando…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer></footer>
+    <script src="../../JS/script.js"></script>
+    <script src="../../JS/link/adm.js"></script>
+    <script src="../../JS/users/adm-lista.js"></script>
+</body>
+
+</html>

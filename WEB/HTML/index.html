@@ -2,30 +2,90 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sky Health - Página Inicial</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sky Health — Início</title>
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/main/landing.css" />
 </head>
 
-<body>
-    <header>
-        <h1>Bem-vindo ao Sky Health</h1>
-        <nav>
-            <a href="main/login.html">Login</a>
-            <a href="main/criar_login.html">Criar Conta</a>
-        </nav>
+<body class="landing-home">
+    <!-- Preloader moderno -->
+    <div id="preloader" aria-hidden="true">
+        <div class="loader">
+            <div class="ring"></div>
+            <div class="dot"></div>
+            <div class="loader-text">Carregando</div>
+        </div>
+    </div>
+
+    <header class="landing-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+            </div>
+            <nav class="landing-actions" aria-label="Ações principais">
+                <button id="btn-login" class="btn btn-primary">Entrar</button>
+                <button id="btn-create" class="btn btn-secondary">Criar conta</button>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <p>Escolha a opção desejada acima para acessar o sistema.</p>
+    <main class="landing">
+        <section class="hero">
+            <div class="hero-copy">
+                <h2>Saúde conectada, simples e segura</h2>
+                <p>
+                    Cadastre pacientes e médicos, gerencie agendamentos e prescrições em um só lugar.
+                </p>
+                <div class="hero-cta">
+                    <button id="cta-login" class="btn btn-primary">Começar agora</button>
+                    <button id="cta-create" class="btn btn-outline">Criar uma conta</button>
+                </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="glass-card">
+                    <div class="stat"><strong>+120</strong><span>Agendamentos</span></div>
+                    <div class="stat"><strong>+80</strong><span>Prescrições</span></div>
+                    <div class="stat"><strong>24/7</strong><span>Online</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <article class="feature">
+                <h3>Agendamentos</h3>
+                <p>Crie e acompanhe consultas com filtros e pesquisa.</p>
+            </article>
+            <article class="feature">
+                <h3>Prescrições</h3>
+                <p>Emita prescrições de forma rápida e verifique sua validade.</p>
+            </article>
+            <article class="feature">
+                <h3>Relatórios</h3>
+                <p>Visão geral de atividades para decisões informadas.</p>
+            </article>
+        </section>
     </main>
+
+    <!-- Menus flutuantes por tipo -->
+    <div id="menu-login" class="floating-menu" role="menu" aria-label="Escolher perfil para login">
+        <button data-role="paciente" class="menu-item">Paciente</button>
+        <button data-role="medico" class="menu-item">Médico</button>
+        <button data-role="adm" class="menu-item">Administrador</button>
+    </div>
+    <div id="menu-create" class="floating-menu" role="menu" aria-label="Escolher perfil para cadastro">
+        <button data-role="paciente" class="menu-item">Paciente</button>
+        <button data-role="medico" class="menu-item">Médico</button>
+        <button data-role="adm" class="menu-item">Administrador</button>
+    </div>
 
     <footer>
         <p>&copy; 2025 Sky Health</p>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script src="../JS/script.js"></script>
+    <script src="../JS/main/landing.js"></script>
 </body>
 
-</html> 
+</html>

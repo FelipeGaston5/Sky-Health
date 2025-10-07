@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minha Conta - Paciente</title>
+    <link rel="stylesheet" href="../../CSS/style.css" />
+    <link rel="stylesheet" href="../../CSS/main/styles-cadastro.css" />
+    <link rel="stylesheet" href="../../CSS/users/paciente.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                    <h1>Minha Conta (Paciente)</h1>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="card account-card">
+                <div class="card-header">
+                    <h2>Credenciais e Informações</h2>
+                    <span class="required-info">Gerencie seus dados de acesso</span>
+                </div>
+                <div class="patient-form">
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input id="acc-username" class="mono" type="text" readonly />
+                                <span class="field-info">Gerado a partir do CPF no cadastro.</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="email-input-group">
+                                    <input id="acc-password" class="mono" type="text" readonly />
+                                    <button id="btn-toggle-pass" class="btn btn-secondary"
+                                        type="button">Mostrar</button>
+                                </div>
+                                <span class="field-info">Padrão: últimos 6 dígitos do CPF. Recomenda-se alterar.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ID</label>
+                                <input id="acc-id" class="mono" type="text" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input id="acc-nome" type="text" />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input id="acc-email" type="email" />
+                            </div>
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input id="acc-telefone" type="text" />
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button id="btn-salvar" class="btn btn-primary" type="button">Salvar alterações</button>
+                            <button id="btn-redefinir-senha" class="btn btn-secondary" type="button">Redefinir
+                                senha</button>
+                            <button id="btn-excluir" class="btn btn-secondary danger" type="button">Apagar
+                                conta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Área do Paciente</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../../JS/script.js"></script>
+    <script src="../../JS/link/paciente.js"></script>
+    <script src="../../JS/users/paciente-conta.js"></script>
+</body>
+
+</html>

@@ -5,24 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/main/main.css">
+    <link rel="stylesheet" href="../../CSS/style.css">
+    <link rel="stylesheet" href="../../CSS/main/auth.css">
+    <script defer src="../../JS/script.js"></script>
+    <script defer src="../../JS/main/login.js"></script>
+
 </head>
 
-<body>
+<body class="auth-page">
     <header>
-        <h1>Login</h1>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+            </div>
+            <nav class="landing-actions">
+                <a class="btn btn-secondary" href="../index.html">Início</a>
+            </nav>
+        </div>
     </header>
+
     <main>
-        <form>
-            <label>Usuário: <input type="text" name="usuario"></label><br>
-            <label>Senha: <input type="password" name="senha"></label><br>
-            <button type="submit">Entrar</button>
-        </form>
+        <div class="card auth-card">
+            <div class="card-header">
+                <h2>Acessar o sistema</h2>
+                <small class="muted">Entre com seu perfil, usuário e senha</small>
+            </div>
+            <form id="login-form">
+                <div class="form-section">
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="role" class="required">Perfil</label>
+                            <select id="role" name="role" required>
+                                <option value="">Selecione</option>
+                                <option value="paciente">Paciente</option>
+                                <option value="medico">Médico</option>
+                                <option value="adm">Administrador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="username" class="required">Usuário</label>
+                            <input type="text" id="username" name="username" required placeholder="CPF ou usuário" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="password" class="required">Senha</label>
+                            <input type="password" id="password" name="password" required placeholder="Senha" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </div>
+            </form>
+        </div>
     </main>
-    <footer>&copy; 2025 Sky Health</footer>
-    <script src="../../js/script.js"></script>
-    <script src="../../js/main/main.js"></script>
+
+    <footer>
+        <small class="muted">Página de login</small>
+    </footer>
 </body>
 
 </html>

@@ -1,0 +1,26 @@
+{
+  "name": "sky-health",
+  "version": "1.0.0",
+  "description": "- Arthur Vinicios Carvalho dos Santos\r - Camylle Mayara Torres de Almeida\r - Felipe Tadeu Paiva Gaston\r - Giovanna Lethicia Caxias Pereira da Silva\r - Júlia Vitória da Silva Fonseca\r - Mateus Gomes Mendes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelipeGaston5/Sky-Health.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/FelipeGaston5/Sky-Health/issues"
+  },
+  "homepage": "https://github.com/FelipeGaston5/Sky-Health#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
+  }
+}

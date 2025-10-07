@@ -1,30 +1,342 @@
+/* ======== Sky-Health Theme (Global) ======== */
+
+/* Paleta Light (padrão) */
 :root {
-    --cor-principal: #555ede;
-    --cor-secundaria: #c5cbff;
-    --cor-texto: #333;
-    --fonte-principal: 'Roboto', sans-serif;
+    --color-primary: #1E88E5;
+    --color-primary-light: #BBDEFB;
+    --color-primary-dark: #0D47A1;
+    --color-secondary: #43A047;
+    --color-background: #FFFFFF;
+    --color-surface: #ECEFF1;
+    --color-text: #212121;
+    --color-border: #CFD8DC;
+    --color-hover: #1565C0;
+
+    /* Mapeamento para tokens legados */
+    --primary: var(--color-primary);
+    --primary-dark: var(--color-primary-dark);
+    --primary-light: var(--color-primary-light);
+    --secondary: var(--color-secondary);
+    --light: var(--color-background);
+    --dark: var(--color-text);
+    --gray: #64748B;
+    --light-gray: var(--color-surface);
+    --border: var(--color-border);
+
+    /* Outros tokens */
+    --shadow: 0 8px 32px rgba(2, 6, 23, 0.12);
+    --glass: rgba(255, 255, 255, 0.6);
+    --radius: 16px;
+    --transition: 0.3s cubic-bezier(.25, .8, .25, 1);
+    --fonte-principal: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
     --tamanho-fonte-base: 16px;
+    --logo: url('../assets/img/logos/claro.png');
+}
+
+/* Paleta Dark (aplicada quando body[data-theme="dark"]) */
+body[data-theme="dark"] {
+    --color-primary: #64B5F6;
+    --color-primary-light: #1565C0;
+    --color-primary-dark: #0D47A1;
+    --color-secondary: #81C784;
+    --color-background: #121212;
+    --color-surface: #1E1E1E;
+    --color-text: #E0E0E0;
+    --color-border: #333333;
+    --color-hover: #2196F3;
+    --logo: url('../assets/img/logos/escuro.png');
+}
+
+/* Reset e base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--fonte-principal);
 }
 
 body {
-    font-family: var(--fonte-principal);
     font-size: var(--tamanho-fonte-base);
-    color: var(--cor-texto);
-    background-color: var(--cor-secundaria);
-    margin: 0;
-    padding: 0;
+    color: var(--dark);
+    background: linear-gradient(120deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    min-height: 100vh;
+    letter-spacing: .01em;
+    transition: background 450ms ease, color 300ms ease;
 }
 
+/* Em dark-mode, use um fundo mais neutro (background -> surface) */
+body.dark-mode {
+    color: var(--light);
+    background: linear-gradient(120deg, var(--color-background) 0%, var(--color-surface) 100%);
+}
+
+/* Header e Footer */
 header,
 footer {
-    background-color: var(--cor-principal);
-    color: white;
-    padding: 1rem;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 1.5rem 0 1rem 0;
     text-align: center;
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: 0 4px 24px rgba(44, 44, 84, .08);
+    position: relative;
 }
 
-nav a {
-    margin: 0 1rem;
-    color: white;
+body.dark-mode header,
+body.dark-mode footer {
+    background: linear-gradient(90deg, var(--color-surface) 0%, #0b1222 100%);
+    color: var(--light);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .4);
+    transition: background 450ms ease, color 300ms ease, box-shadow 300ms ease;
+}
+
+header .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+header .header-content nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Botões modernos globais */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 12px;
+    padding: .6rem .95rem;
+    border: 1px solid transparent;
+    cursor: pointer;
     text-decoration: none;
+    user-select: none;
+    transition: transform 150ms ease, box-shadow 220ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(2, 6, 23, .10);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(2, 6, 23, .10);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, .25);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.btn-secondary {
+    background: var(--light);
+    color: var(--dark);
+    border-color: var(--border);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--dark);
+    border-color: var(--border);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--dark);
+    border-color: transparent;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.02);
+}
+
+.btn-secondary:hover {
+    background: var(--light-gray);
+}
+
+.btn-outline:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.btn-ghost:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.btn-danger:hover {
+    filter: brightness(1.03);
+}
+
+body.dark-mode .btn-outline {
+    color: var(--light);
+    border-color: var(--color-border);
+}
+
+body.dark-mode .btn-secondary {
+    background: var(--color-surface);
+    color: var(--light);
+    border-color: var(--color-border);
+}
+
+body.dark-mode .btn-outline:hover,
+body.dark-mode .btn-ghost:hover {
+    background: rgba(255, 255, 255, .06);
+}
+
+.btn-sm {
+    padding: .45rem .7rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-lg {
+    padding: .85rem 1.2rem;
+    border-radius: 14px;
+    font-size: 1.05rem;
+}
+
+.btn .btn-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn .btn-icon.left {
+    margin-right: .35rem;
+}
+
+.btn .btn-icon.right {
+    margin-left: .35rem;
+}
+
+/* Navegação: aplica somente a links simples, não aos botões .btn */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+nav a:not(.btn) {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    background: var(--glass);
+    box-shadow: 0 2px 8px rgba(44, 44, 84, .06);
+    transition: background 250ms ease, color 250ms ease, box-shadow 250ms ease, transform 150ms ease;
+}
+
+nav a:not(.btn):hover,
+nav a:not(.btn).active {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(44, 44, 84, .12);
+}
+
+/* Botão de alternância de tema */
+.theme-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--light);
+    color: var(--dark);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    user-select: none;
+    transition: transform var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+    z-index: 1000;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+}
+
+.theme-toggle:active {
+    transform: translateY(0);
+}
+
+body.dark-mode .theme-toggle {
+    background: #121a2a;
+    color: var(--light);
+    border-color: #1f2b44;
+}
+
+header nav .theme-toggle,
+header .landing-actions .theme-toggle,
+header .theme-toggle {
+    position: static;
+    right: auto;
+    bottom: auto;
+    margin-left: 8px;
+}
+
+.theme-toggle__icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.theme-toggle__label {
+    font-size: .95rem;
+}
+
+/* Logo global (usa var(--logo)) */
+.logo-global {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 150px;
+    height: 60px;
+    background-image: var(--logo);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+    border-radius: 12px;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .logo-global {
+        width: 110px;
+        height: 44px;
+        left: 10px;
+    }
 }

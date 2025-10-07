@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Área do Administrador - Sky Health</title>
+    <link rel="stylesheet" href="../../../CSS/style.css" />
+    <link rel="stylesheet" href="../../../CSS/main/index/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                <h1>Área do Administrador</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-card">
+            <div class="dashboard-layout">
+                <aside class="sidebar card">
+                    <div class="card-header">
+                        <h3>Menu</h3>
+                    </div>
+                    <nav class="side-nav tabs">
+                        <button data-tab="usuarios" class="active">Usuários</button>
+                        <button data-tab="relatorios">Relatórios</button>
+                    </nav>
+                </aside>
+                <section class="content card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Painel do Administrador</h2>
+                            <small id="adm-info" class="muted">—</small>
+                        </div>
+                        <div class="inline">
+                            <a class="btn btn-secondary" href="../../users/adm.html">Meu Perfil</a>
+                            <button id="adm-refresh" class="btn btn-secondary" type="button">Atualizar</button>
+                        </div>
+                    </div>
+                    <div class="page-title">
+                        <h2 id="page-section-title">Usuários</h2>
+                        <p class="muted">Visualize pacientes e médicos, e acompanhe relatórios do sistema.</p>
+                    </div>
+                    <div class="patient-form">
+
+                        <section id="tab-usuarios" class="tab-panel active">
+                            <h4 class="section-title">Pacientes</h4>
+                            <div class="panel-header">
+                                <h3>Lista de Pacientes</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="pac-search">Buscar</label>
+                                        <input id="pac-search" type="search" placeholder="Nome, CPF, e-mail..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrap">
+                                <table class="list">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>CPF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pac-list">
+                                        <tr class="empty-state">
+                                            <td colspan="3">Carregando…</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="pac-detail-card" class="card" style="display:none; margin-top: 1rem;">
+                                <div class="card-header">
+                                    <strong>Detalhes do Paciente</strong>
+                                    <small id="pac-detail-name" class="muted" style="margin-left:.5rem">—</small>
+                                </div>
+                                <div class="patient-form">
+                                    <table class="list">
+                                        <tbody id="pac-detail"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <h4 class="section-title" style="margin-top:1.25rem">Médicos</h4>
+                            <div class="panel-header">
+                                <h3>Lista de Médicos</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="med-search">Buscar</label>
+                                        <input id="med-search" type="search" placeholder="Nome, CRM, e-mail..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrap">
+                                <table class="list">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>CRM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="med-list">
+                                        <tr class="empty-state">
+                                            <td colspan="3">Carregando…</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="med-detail-card" class="card" style="display:none; margin-top: 1rem;">
+                                <div class="card-header">
+                                    <strong>Detalhes do Médico</strong>
+                                    <small id="med-detail-name" class="muted" style="margin-left:.5rem">—</small>
+                                </div>
+                                <div class="patient-form">
+                                    <table class="list">
+                                        <tbody id="med-detail"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="tab-relatorios" class="tab-panel">
+                            <h4 class="section-title">Visão geral</h4>
+                            <div class="panel-header">
+                                <h3>Relatórios</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="rel-range">Período</label>
+                                        <select id="rel-range">
+                                            <option value="7">Últimos 7 dias</option>
+                                            <option value="30">Últimos 30 dias</option>
+                                            <option value="90">Últimos 90 dias</option>
+                                            <option value="all">Tudo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="two-col">
+                                <div class="card">
+                                    <div class="card-header"><strong>Agendamentos</strong></div>
+                                    <div class="patient-form">
+                                        <ul id="rel-ag-stats" class="muted"></ul>
+                                        <h5 class="group-title">Próximos</h5>
+                                        <table class="list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Médico</th>
+                                                    <th>Paciente</th>
+                                                    <th>Tipo</th>
+                                                    <th>Data</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="rel-ag-prox">
+                                                <tr class="empty-state">
+                                                    <td colspan="5">Carregando…</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <h5 class="group-title">Recentes</h5>
+                                        <table class="list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Médico</th>
+                                                    <th>Paciente</th>
+                                                    <th>Tipo</th>
+                                                    <th>Data</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="rel-ag-recentes">
+                                                <tr class="empty-state">
+                                                    <td colspan="5">Carregando…</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header"><strong>Prescrições</strong></div>
+                                    <div class="patient-form">
+                                        <ul id="rel-pr-stats" class="muted"></ul>
+                                        <h5 class="group-title">Válidas</h5>
+                                        <table class="list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo</th>
+                                                    <th>Médico</th>
+                                                    <th>Paciente</th>
+                                                    <th>Validade</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="rel-pr-validas">
+                                                <tr class="empty-state">
+                                                    <td colspan="4">Carregando…</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <h5 class="group-title">Retiradas</h5>
+                                        <table class="list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo</th>
+                                                    <th>Médico</th>
+                                                    <th>Paciente</th>
+                                                    <th>Validade</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="rel-pr-retiradas">
+                                                <tr class="empty-state">
+                                                    <td colspan="4">Carregando…</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-fixed">
+        <div class="footer-content">
+            <p>Área do Administrador</p>
+        </div>
+    </footer>
+
+    <script src="../../../JS/script.js"></script>
+    <script src="../../../JS/link/paciente.js"></script>
+    <script src="../../../JS/link/medico.js"></script>
+    <script src="../../../JS/main/adm-dashboard.js"></script>
+</body>
+
+</html>
