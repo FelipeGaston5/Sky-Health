@@ -1,0 +1,7 @@
+{
+  "name": "Sky-health",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
