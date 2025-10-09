@@ -129,7 +129,7 @@
                 const base = idx >= 0 ? path.slice(0, idx + marker.length) : path.slice(0, path.lastIndexOf('/') + 1);
                 window.location.href = base + target;
             };
-            document.querySelectorAll('.logo-icon, .logo-global').forEach(el => {
+            document.querySelectorAll('.logo-icon, .logo-global, .logo-brand').forEach(el => {
                 el.style.cursor = 'pointer';
                 el.setAttribute('title', 'Voltar ao início');
                 el.addEventListener('click', go);

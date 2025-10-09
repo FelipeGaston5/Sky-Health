@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const agendamentoSchema = new mongoose.Schema({
     paciente: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        // Ref anterior incorreta ('User'). O modelo registrado em userModel.js é 'Pacientes'.
+        ref: 'Pacientes',
         required: [true, 'Paciente é obrigatório']
     },
     medico: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Med',
+        // Ref anterior incorreta ('Med'). O modelo registrado em medicoModel.js é 'Medico'.
+        ref: 'Medico',
         required: [true, 'Médico é obrigatório']
     },
     prescricao: {

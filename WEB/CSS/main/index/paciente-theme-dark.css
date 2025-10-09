@@ -1,0 +1,320 @@
+/* Overrides Modo Escuro para Paciente (não sobrescreve background global para manter gradiente do light quando claro) */
+/* Accept either adding class to html or body */
+html.dark-theme,
+body.dark-mode {
+    --bg: #121417;
+    --bg-alt: #1b1f24;
+    --bg-alt2: #22272e;
+    --text: #e5e9ef;
+    --text-muted: #9da7b3;
+    --border: #2c3238;
+    --shadow: 0 4px 24px -6px rgba(0, 0, 0, .6);
+    --accent: #64b5f6;
+    --accent-contrast: #0d1114;
+    --danger: #ef5350;
+    --success: #81c784;
+    --focus: #ffca28;
+    --code-bg: #1e242b;
+    --chip-bg: #2a3138;
+    --scrollbar-bg: #2b3238;
+    --scrollbar-thumb: #4a545d;
+}
+
+html.dark-theme .card,
+html.dark-theme .dashboard-card,
+html.dark-theme .modal-box {
+    background: var(--bg-alt);
+    color: var(--text);
+    box-shadow: var(--shadow);
+}
+
+html.dark-theme .card-header {
+    background: var(--bg-alt2);
+    border-bottom: 1px solid var(--border);
+}
+
+html.dark-theme .list thead th {
+    background: var(--bg-alt2);
+}
+
+html.dark-theme .list,
+html.dark-theme .list th,
+html.dark-theme .list td {
+    border-color: var(--border);
+}
+
+html.dark-theme .list tbody tr:hover {
+    background: var(--bg-alt2);
+}
+
+html.dark-theme .btn.btn-secondary {
+    background: var(--bg-alt2);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+html.dark-theme .btn.btn-secondary:hover {
+    filter: brightness(1.05);
+}
+
+html.dark-theme .btn.btn-primary {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border: 1px solid var(--accent);
+}
+
+html.dark-theme .btn.btn-primary:hover {
+    filter: brightness(1.08);
+}
+
+html.dark-theme .muted {
+    color: var(--text-muted);
+}
+
+html.dark-theme #hist-conteudo pre.hist-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+html.dark-theme .status-pendente {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+html.dark-theme .status-concluido {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Field blocks e conteúdos em dark */
+html.dark-theme .field-block pre,
+html.dark-theme .field-block div.value {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+html.dark-theme .chip {
+    background: var(--chip-bg);
+    color: var(--text-muted);
+}
+
+html.dark-theme .modal-overlay {
+    background: rgba(0, 0, 0, .55);
+}
+
+html.dark-theme .modal-box {
+    border: 1px solid var(--border);
+}
+
+/* ================= Modal de Importação HMC (Dark) ================= */
+html.dark-theme #mhmc-preview,
+body.dark-mode #mhmc-preview {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+html.dark-theme #mhmc-meta,
+body.dark-mode #mhmc-meta {
+    color: var(--text-muted);
+}
+
+html.dark-theme #mhmc-meta.match,
+body.dark-mode #mhmc-meta.match {
+    color: var(--success);
+}
+
+html.dark-theme #mhmc-meta.mismatch,
+body.dark-mode #mhmc-meta.mismatch {
+    color: var(--danger);
+}
+
+html.dark-theme #modal-hmc .modal-box,
+body.dark-mode #modal-hmc .modal-box {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+}
+
+html.dark-theme #modal-hmc .modal-header h2,
+body.dark-mode #modal-hmc .modal-header h2 {
+    color: var(--text);
+}
+
+html.dark-theme #modal-hmc .modal-actions .btn.btn-secondary,
+body.dark-mode #modal-hmc .modal-actions .btn.btn-secondary {
+    background: var(--bg-alt2);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+html.dark-theme #modal-hmc .modal-actions .btn.btn-secondary:hover,
+body.dark-mode #modal-hmc .modal-actions .btn.btn-secondary:hover {
+    filter: brightness(1.08);
+}
+
+html.dark-theme #modal-hmc .modal-actions .btn.btn-outline,
+body.dark-mode #modal-hmc .modal-actions .btn.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+html.dark-theme #modal-hmc .modal-actions .btn.btn-outline:hover,
+body.dark-mode #modal-hmc .modal-actions .btn.btn-outline:hover {
+    background: var(--bg-alt2);
+    color: var(--text);
+}
+
+html.dark-theme .modal-close,
+body.dark-mode .modal-close {
+    color: var(--text-muted);
+    transition: color .15s ease, background .15s ease;
+}
+
+html.dark-theme .modal-close:hover,
+body.dark-mode .modal-close:hover {
+    color: var(--text);
+    background: var(--bg-alt2);
+    border-radius: 4px;
+}
+
+/* Scrollbar dentro do preview */
+html.dark-theme #mhmc-preview::-webkit-scrollbar,
+body.dark-mode #mhmc-preview::-webkit-scrollbar {
+    width: 10px;
+}
+
+html.dark-theme #mhmc-preview::-webkit-scrollbar-track,
+body.dark-mode #mhmc-preview::-webkit-scrollbar-track {
+    background: var(--bg-alt);
+}
+
+html.dark-theme #mhmc-preview::-webkit-scrollbar-thumb,
+body.dark-mode #mhmc-preview::-webkit-scrollbar-thumb {
+    background: var(--bg-alt2);
+    border-radius: 4px;
+}
+
+html.dark-theme #mhmc-preview::-webkit-scrollbar-thumb:hover,
+body.dark-mode #mhmc-preview::-webkit-scrollbar-thumb:hover {
+    background: var(--code-bg);
+}
+
+html.dark-theme .modal-header {
+    border-bottom: 1px solid var(--border);
+}
+
+/* (Removido bloco duplicado de .modal-close color var(--text)) */
+
+html.dark-theme .field-block h4 {
+    color: var(--text-muted);
+}
+
+html.dark-theme .field-block pre,
+html.dark-theme .field-block div.value {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+html.dark-theme .chip {
+    background: var(--chip-bg);
+    color: var(--text-muted);
+}
+
+html.dark-theme :focus {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+html.dark-theme .card,
+html.dark-theme .modal-box,
+html.dark-theme .list tbody tr {
+    transition: background .3s ease, color .3s ease, border-color .3s ease;
+}
+
+html.dark-theme .list tbody tr:hover {
+    background: #2a3138;
+}
+
+/* Scrollbar somente dark */
+html.dark-theme body::-webkit-scrollbar,
+html.dark-theme .modal-body::-webkit-scrollbar,
+html.dark-theme #hist-conteudo::-webkit-scrollbar {
+    width: 10px;
+}
+
+html.dark-theme body::-webkit-scrollbar-track,
+html.dark-theme .modal-body::-webkit-scrollbar-track,
+html.dark-theme #hist-conteudo::-webkit-scrollbar-track {
+    background: var(--scrollbar-bg);
+}
+
+html.dark-theme body::-webkit-scrollbar-thumb,
+html.dark-theme .modal-body::-webkit-scrollbar-thumb,
+html.dark-theme #hist-conteudo::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 6px;
+}
+
+/* Ensure modal + blocks also adapt when only body has class */
+body.dark-mode .modal-box,
+body.dark-mode .card,
+body.dark-mode .dashboard-card {
+    background: var(--bg-alt);
+    color: var(--text);
+}
+
+body.dark-mode .modal-header {
+    border-bottom: 1px solid var(--border);
+}
+
+body.dark-mode .modal-close {
+    color: var(--text);
+}
+
+body.dark-mode .field-block pre,
+body.dark-mode .field-block div.value {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+body.dark-mode .chip {
+    background: var(--chip-bg);
+    color: var(--text-muted);
+}
+
+body.dark-mode .status-pendente {
+    color: var(--danger);
+}
+
+body.dark-mode .status-concluido {
+    color: var(--success);
+}
+
+body.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, .65);
+}
+
+/* Scrollbars for body.dark-mode */
+body.dark-mode::-webkit-scrollbar,
+body.dark-mode .modal-body::-webkit-scrollbar,
+body.dark-mode #hist-conteudo::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.dark-mode::-webkit-scrollbar-track,
+body.dark-mode .modal-body::-webkit-scrollbar-track,
+body.dark-mode #hist-conteudo::-webkit-scrollbar-track {
+    background: var(--scrollbar-bg);
+}
+
+body.dark-mode::-webkit-scrollbar-thumb,
+body.dark-mode .modal-body::-webkit-scrollbar-thumb,
+body.dark-mode #hist-conteudo::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 6px;
+}

@@ -315,15 +315,87 @@ body.dark-mode .list th {
 }
 
 /* Em dark mode, os valores das tabelas ficam com fundo branco e texto preto
-   para manter a legibilidade mesmo que o tema global use texto claro. */
-body.dark-mode .list td {
-    background: #ffffff;
-    color: #111111;
+   para manter a legibilidade mesmo que o tema global use texto claro. (Substituído: agora manter tudo escuro) */
+
+/* ================= Dark Mode Ajustado (fundo preto) ================= */
+body.dark-mode {
+    --bg-card: #0d0d0d;
+    --borda: #262626;
+    --texto-suave: #9ca3af;
 }
 
-/* Links dentro de células também devem acompanhar a cor do texto */
+body.dark-mode .card {
+    background: var(--bg-card);
+    border-color: var(--borda);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .55);
+}
+
+body.dark-mode .patient-form {
+    background: transparent;
+}
+
+body.dark-mode .list th {
+    background: #161616;
+    color: #f5f5f5;
+    border-bottom-color: #333;
+}
+
+body.dark-mode .list td {
+    background: #0d0d0d;
+    color: #e5e5e5;
+    border-bottom-color: #272727;
+}
+
 body.dark-mode .list td a {
-    color: #111111;
+    color: #90caf9;
+}
+
+body.dark-mode .tabs button {
+    background: #161616;
+    border-color: #303030;
+    color: #d1d5db;
+}
+
+body.dark-mode .tabs button.active {
+    background: var(--cor-principal, #4a90e2);
+    color: #fff;
+    border-color: var(--cor-principal, #4a90e2);
+}
+
+body.dark-mode .empty-state-card {
+    background: #121212;
+    border-color: #2c2c2c;
+}
+
+body.dark-mode .alert.success {
+    background: #0d3321;
+    color: #b7f7c5;
+    border-color: #115533;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background: #121212;
+    border-color: #303030;
+    color: #e5e5e5;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: var(--cor-principal, #4a90e2);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, .25);
+}
+
+body.dark-mode .btn-secondary {
+    background: #1e1e1e;
+    color: #e5e5e5;
+    border-color: #303030;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #262626;
 }
 
 body.dark-mode .tabs button {

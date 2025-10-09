@@ -40,15 +40,33 @@ const presSchema = new mongoose.Schema({
     //==== dados do paciente ====
     paciente: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        // Ref corrigida: modelo definido como 'Pacientes' em userModel.js
+        ref: 'Pacientes',
         required: [true, ' paciente é obrigatório']
     },
 
     //==== dados do médico ====
     medico: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Med',
+        // Ref corrigida: modelo definido como 'Medico' em medicoModel.js
+        ref: 'Medico',
         required: [true, ' médico é obrigatório']
+    },
+    //==== consentimento explícito e assinaturas ====
+    consentimentoExplicito: {
+        type: Boolean,
+        required: [true, ' consentimento explícito é obrigatório'],
+        default: false
+    },
+    assinaturaMedico: {
+        type: String,
+        required: false,
+        trim: true
+    },
+    assinaturaPacienteOuResponsavel: {
+        type: String,
+        required: false,
+        trim: true
     },
     password: {
         type: String,

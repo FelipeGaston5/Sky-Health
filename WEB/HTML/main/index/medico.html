@@ -13,9 +13,10 @@
     <header>
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                <div class="logo-brand" role="img" aria-label="Sky Health"></div>
                 <h1>Área do Médico</h1>
             </div>
+            <nav></nav>
         </div>
     </header>
     <main>
@@ -30,6 +31,7 @@
                         <button data-tab="notificacoes">Notificações</button>
                         <button data-tab="prescricao">Nova Prescrição</button>
                         <button data-tab="novo-agendamento">Novo Agendamento</button>
+                        <button data-tab="exame-resultado">Resultado de Exames</button>
                     </nav>
                 </aside>
                 <section class="content card">
@@ -142,11 +144,37 @@
                                         placeholder="Orientações, medicamentos, etc."></textarea>
                                     <small class="form-hint">Inclua posologia e observações relevantes.</small>
                                 </div>
+                                <div class="form-group">
+                                    <label class="required" for="presConsent">Consentimento explícito do paciente ou
+                                        responsável</label>
+                                    <div class="inline" style="gap:.5rem;align-items:center;flex-wrap:wrap;">
+                                        <input type="checkbox" id="presConsent" />
+                                        <label for="presConsent" style="font-weight:normal;">Confirmo que obtive o
+                                            consentimento informado.</label>
+                                    </div>
+                                    <small class="form-hint">Marque para confirmar que o paciente/responsável autorizou
+                                        esta prescrição.</small>
+                                </div>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="presAssMed">Assinatura / Identificação do Médico</label>
+                                        <input id="presAssMed" type="text" placeholder="Dr(a). Nome, CRM" />
+                                        <small class="form-hint">Pode ser preenchido automaticamente no futuro.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="presAssPac">Assinatura do Paciente ou Responsável</label>
+                                        <input id="presAssPac" type="text" placeholder="Nome legível" />
+                                        <small class="form-hint">Representa aceitação e ciência do conteúdo.</small>
+                                    </div>
+                                </div>
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-primary">Criar Prescrição</button>
                                 </div>
                             </form>
                             <div id="pres-result" class="alert success" style="display:none;"></div>
+                            <div id="pres-issuer" class="muted" style="margin-top:.5rem;font-size:.8rem;">
+                                <!-- Emissor da prescrição será exibido aqui -->
+                            </div>
                         </section>
 
                         <h4 class="section-title">Criar novo agendamento</h4>
@@ -195,6 +223,157 @@
                             </form>
                             <div id="ag-result" class="alert success" style="display:none;"></div>
                         </section>
+                        <!-- Resultado de Exames -->
+                        <section id="tab-exame-resultado" class="tab-panel">
+                            <div class="panel-header">
+                                <h3>Emitir Resultado / Laudo de Exame</h3>
+                            </div>
+                            <div class="card" style="margin-bottom:1rem;">
+                                <h4 class="section-title">Exames Pendentes de Laudo</h4>
+                                <table class="list">
+                                    <thead>
+                                        <tr>
+                                            <th>Paciente</th>
+                                            <th>Exame</th>
+                                            <th>Tipo</th>
+                                            <th>Coleta</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ex-pend-list">
+                                        <tr class="empty-state">
+                                            <td colspan="6">Carregando…</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <form id="form-exame" class="form-section">
+                                <h4 class="section-title">Novo Resultado de Exame</h4>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="exPacienteCpf" class="required">CPF do Paciente</label>
+                                        <input id="exPacienteCpf" type="text" placeholder="000.000.000-00"
+                                            maxlength="14" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exMedicoCrm" class="required">CRM do Médico</label>
+                                        <input id="exMedicoCrm" type="text" placeholder="CRM" />
+                                    </div>
+                                </div>
+                                <div class="two-col">
+                                    <div class="form-group">
+                                        <label for="exTipo" class="required">Tipo do Exame</label>
+                                        <select id="exTipo">
+                                            <option value="Sangue">Sangue</option>
+                                            <option value="Imagem">Imagem</option>
+                                            <option value="Soro">Soro</option>
+                                            <option value="Outros">Outros</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exNome">Nome do Exame</label>
+                                        <input id="exNome" type="text" placeholder="Ex: Hemograma Completo" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exDataColeta">Data da Coleta</label>
+                                    <input id="exDataColeta" type="date" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="exValoresRef">Valores de Referência (opcional)</label>
+                                    <textarea id="exValoresRef" rows="3"
+                                        placeholder="Ex: Hemácias 4.0 - 5.5 milhões/mm³ ..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exLaudo" class="required">Laudo / Observações</label>
+                                    <textarea id="exLaudo" rows="5"
+                                        placeholder="Descrição clínica do resultado, achados, conclusão..."></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Salvar Resultado</button>
+                                </div>
+                            </form>
+                            <div id="exame-result" class="alert success" style="display:none;"></div>
+                        </section>
+                        <div id="modal-laudo" class="modal"
+                            style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);align-items:flex-start;justify-content:center;overflow:auto;">
+                            <div class="modal-content card"
+                                style="max-width:800px;margin:40px auto;padding:1.25rem;position:relative;">
+                                <button type="button" id="laudo-close" class="btn btn-secondary"
+                                    style="position:absolute;top:.5rem;right:.5rem;">X</button>
+                                <h3>Concluir Laudo do Exame</h3>
+                                <form id="form-laudo-completo" class="form-section">
+                                    <input type="hidden" id="laudoExameId" />
+                                    <div class="two-col">
+                                        <div class="form-group">
+                                            <label>Paciente</label>
+                                            <input id="laudoPaciente" type="text" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Exame</label>
+                                            <input id="laudoNomeExame" type="text" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoJustificativa">Justificativa / Indicação Clínica</label>
+                                        <textarea id="laudoJustificativa" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoDescricaoDetalhada" class="required">Descrição
+                                            Detalhada</label>
+                                        <textarea id="laudoDescricaoDetalhada" rows="4"
+                                            placeholder="Relato objetivo das estruturas, achados, dimensões..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoDiscussao">Discussão (opcional)</label>
+                                        <textarea id="laudoDiscussao" rows="3"
+                                            placeholder="Interpretação, comparação com exames prévios..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoConclusao" class="required">Conclusão / Impressão
+                                            Diagnóstica</label>
+                                        <textarea id="laudoConclusao" rows="3"
+                                            placeholder="Síntese dos achados e hipótese diagnóstica"></textarea>
+                                    </div>
+                                    <div class="two-col">
+                                        <div class="form-group">
+                                            <label for="laudoAnalista">Analista / Responsável Técnico</label>
+                                            <input id="laudoAnalista" type="text" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="laudoDiretor">Diretor Técnico</label>
+                                            <input id="laudoDiretor" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="two-col">
+                                        <div class="form-group">
+                                            <label for="laudoLocalNome">Local (Clínica / Laboratório)</label>
+                                            <input id="laudoLocalNome" type="text" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="laudoLocalEndereco">Endereço</label>
+                                            <input id="laudoLocalEndereco" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoValoresReferencia">Valores de Referência (se aplicável)</label>
+                                        <textarea id="laudoValoresReferencia" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="laudoTextoLivre">Laudo Texto Livre (campo adicional)</label>
+                                        <textarea id="laudoTextoLivre" rows="4"
+                                            placeholder="Observações gerais adicionais"></textarea>
+                                    </div>
+                                    <div class="form-actions" style="gap:.5rem;">
+                                        <button type="submit" class="btn btn-primary">Salvar / Concluir Laudo</button>
+                                        <button type="button" id="laudo-cancel"
+                                            class="btn btn-secondary">Cancelar</button>
+                                    </div>
+                                    <div id="laudo-status" class="alert success" style="display:none;"></div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -207,6 +386,10 @@
         </div>
     </footer>
 
+    <!-- APIs de acesso a pacientes e médicos (necessárias para criar agendamentos) -->
+    <script src="../../../JS/link/paciente.js"></script>
+    <script src="../../../JS/link/medico.js"></script>
+    <!-- Script base e dashboard do médico -->
     <script src="../../../JS/script.js"></script>
     <script src="../../../JS/main/medico-dashboard.js"></script>
 </body>

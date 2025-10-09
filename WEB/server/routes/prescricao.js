@@ -7,7 +7,7 @@ const Med = require('../models/medicoModel');
 // Criar prescrição usando CPF do paciente e CRM do médico
 routes.post('/', async (req, res) => {
     try {
-        const { pacienteCpf, medicoCrm, tipo, descricao, dataValidade } = req.body;
+        const { pacienteCpf, medicoCrm, tipo, descricao, dataValidade, consentimentoExplicito, assinaturaMedico, assinaturaPacienteOuResponsavel } = req.body;
 
         // Buscar paciente pelo CPF
         const paciente = await User.findOne({ cpf: pacienteCpf });
@@ -23,7 +23,10 @@ routes.post('/', async (req, res) => {
             medico: medico._id,
             tipo,
             descricao,
-            dataValidade
+            dataValidade,
+            consentimentoExplicito: !!consentimentoExplicito,
+            assinaturaMedico: assinaturaMedico || null,
+            assinaturaPacienteOuResponsavel: assinaturaPacienteOuResponsavel || null
         });
 
         await pres.save();

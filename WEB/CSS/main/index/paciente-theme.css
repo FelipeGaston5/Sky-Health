@@ -1,0 +1,169 @@
+/* Light theme scoped additions for paciente page */
+:root {
+    --pac-ref-border: #e2e2e2;
+    --pac-ref-bg: #fafafa;
+    --pac-ref-muted: #555;
+}
+
+/* Modal base (light) */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem;
+    z-index: 999;
+    overflow: auto;
+}
+
+.modal-box {
+    max-width: 820px;
+    width: 100%;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 22px -4px rgba(0, 0, 0, .35);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn .25s ease;
+}
+
+.modal-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--pac-ref-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: .25rem .5rem;
+    color: #444;
+}
+
+.modal-close:hover {
+    filter: brightness(1.2);
+}
+
+.modal-body {
+    padding: 1rem 1.25rem 1.5rem;
+    max-height: 65vh;
+    overflow: auto;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: .75rem 1rem;
+}
+
+.field-block {
+    margin-bottom: .85rem;
+}
+
+.field-block h4 {
+    margin: .5rem 0 .35rem;
+    font-size: .65rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--pac-ref-muted);
+    font-weight: 600;
+}
+
+.field-block pre,
+.field-block div.value {
+    background: var(--pac-ref-bg);
+    border: 1px solid var(--pac-ref-border);
+    padding: .65rem .75rem;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: .8rem;
+    color: #222;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: .25rem 0 .5rem;
+}
+
+.chip {
+    background: #f1f5f9;
+    padding: .35rem .6rem;
+    border-radius: 20px;
+    font-size: .65rem;
+    letter-spacing: .5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.status-pendente {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.status-concluido {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================= Modal de Importação HMC (Light) ================= */
+#modal-hmc .modal-box {
+    max-width: 900px;
+}
+
+#mhmc-preview {
+    background: var(--pac-ref-bg);
+    border: 1px solid var(--pac-ref-border);
+    color: #222;
+    overflow: auto;
+    padding: .75rem;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: .75rem;
+    line-height: 1.25;
+}
+
+#mhmc-meta {
+    color: var(--pac-ref-muted);
+}
+
+#mhmc-meta.match {
+    color: #1b7f3b;
+}
+
+#mhmc-meta.mismatch {
+    color: #b54730;
+}
+
+/* Ações do modal (util para dark mode também) */
+.modal-actions .btn {
+    position: relative;
+}

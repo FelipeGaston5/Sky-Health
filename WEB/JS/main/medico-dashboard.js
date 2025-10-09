@@ -7,6 +7,7 @@
         notif: byId('tab-notificacoes'),
         pres: byId('tab-prescricao'),
         novoAg: byId('tab-novo-agendamento'),
+        exame: byId('tab-exame-resultado')
     };
     const agList = byId('ag-list');
     const info = byId('medico-info');
@@ -33,12 +34,14 @@
             if (tab === 'notificacoes') panels.notif?.classList.add('active');
             if (tab === 'prescricao') panels.pres?.classList.add('active');
             if (tab === 'novo-agendamento') panels.novoAg?.classList.add('active');
+            if (tab === 'exame-resultado') panels.exame?.classList.add('active');
             if (pageTitle) {
                 const map = {
                     'agendamentos': 'Agendamentos',
                     'notificacoes': 'Notificações',
                     'prescricao': 'Nova Prescrição',
-                    'novo-agendamento': 'Novo Agendamento'
+                    'novo-agendamento': 'Novo Agendamento',
+                    'exame-resultado': 'Resultado de Exames'
                 };
                 pageTitle.textContent = map[tab] || 'Painel';
             }
@@ -88,6 +91,39 @@
     const presValidade = byId('presValidade');
     const presDesc = byId('presDesc');
     const presResult = byId('pres-result');
+    const presIssuer = byId('pres-issuer');
+    // Exames
+    const formExame = byId('form-exame');
+    const exPacienteCpf = byId('exPacienteCpf');
+    const exMedicoCrm = byId('exMedicoCrm');
+    const exTipo = byId('exTipo');
+    const exNome = byId('exNome');
+    const exDataColeta = byId('exDataColeta');
+    const exValoresRef = byId('exValoresRef');
+    const exLaudo = byId('exLaudo');
+    const exameResult = byId('exame-result');
+    const exPendList = byId('ex-pend-list');
+    const modalLaudo = byId('modal-laudo');
+    const laudoClose = byId('laudo-close');
+    const laudoCancel = byId('laudo-cancel');
+    const formLaudo = byId('form-laudo-completo');
+    const laudoExameId = byId('laudoExameId');
+    const laudoPaciente = byId('laudoPaciente');
+    const laudoNomeExame = byId('laudoNomeExame');
+    const laudoJustificativa = byId('laudoJustificativa');
+    const laudoDescricaoDetalhada = byId('laudoDescricaoDetalhada');
+    const laudoDiscussao = byId('laudoDiscussao');
+    const laudoConclusao = byId('laudoConclusao');
+    const laudoAnalista = byId('laudoAnalista');
+    const laudoDiretor = byId('laudoDiretor');
+    const laudoLocalNome = byId('laudoLocalNome');
+    const laudoLocalEndereco = byId('laudoLocalEndereco');
+    const laudoValoresReferencia = byId('laudoValoresReferencia');
+    const laudoTextoLivre = byId('laudoTextoLivre');
+    const laudoStatus = byId('laudo-status');
+    const presConsent = byId('presConsent');
+    const presAssMed = byId('presAssMed');
+    const presAssPac = byId('presAssPac');
 
     formPres?.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -96,17 +132,24 @@
             medicoCrm: (presMedicoCrm.value || '').trim(),
             tipo: presTipo.value,
             descricao: (presDesc.value || '').trim(),
-            dataValidade: presValidade.value || null
+            dataValidade: presValidade.value || null,
+            consentimentoExplicito: !!presConsent?.checked,
+            assinaturaMedico: (presAssMed?.value || '').trim() || null,
+            assinaturaPacienteOuResponsavel: (presAssPac?.value || '').trim() || null
         };
-        if (!payload.pacienteCpf || !payload.medicoCrm || !payload.tipo || !payload.descricao || !payload.dataValidade) {
-            return alert('Preencha todos os campos obrigatórios da prescrição.');
+        if (!payload.pacienteCpf || !payload.medicoCrm || !payload.tipo || !payload.descricao || !payload.dataValidade || !payload.consentimentoExplicito) {
+            return alert('Preencha todos os campos obrigatórios e confirme o consentimento.');
         }
         try {
             const r = await fetch('http://localhost:3000/prescricao', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             if (!r.ok) throw new Error(await r.text());
             const data = await r.json();
+            const emitidoPor = data?.prescricao?.medico?.nome ? `${data.prescricao.medico.nome} (CRM ${data.prescricao.medico.crm || '—'})` : (presAssMed?.value || medicoObj?.nome || 'Médico');
             presResult.textContent = `Prescrição criada: ID ${data?.prescricao?._id || '—'}`;
             presResult.style.display = 'block';
+            if (presIssuer) {
+                presIssuer.textContent = `Emitido por: ${emitidoPor} em ${new Date().toLocaleString()}`;
+            }
             formPres.reset();
         } catch (e) {
             console.error(e);
@@ -180,6 +223,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         tryPrefill();
         loadAgendamentos();
+        loadExamesPendentes();
     });
 
     // Refresh e filtros
@@ -199,4 +243,142 @@
     cpfInput?.addEventListener('input', () => { cpfInput.value = maskCPF(cpfInput.value); });
     const cpfAgInput = byId('agPacienteCpf');
     cpfAgInput?.addEventListener('input', () => { cpfAgInput.value = maskCPF(cpfAgInput.value); });
+
+    // máscara CPF também para exame
+    exPacienteCpf?.addEventListener('input', () => { exPacienteCpf.value = maskCPF(exPacienteCpf.value); });
+
+    // Pré-preencher CRM do médico no formulário de exame
+    if (medicoObj?.crm && exMedicoCrm && !exMedicoCrm.value) exMedicoCrm.value = medicoObj.crm;
+
+    formExame?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            pacienteCpf: onlyDigits(exPacienteCpf.value),
+            medicoCrm: (exMedicoCrm.value || '').trim(),
+            tipoExame: exTipo.value,
+            nomeExame: (exNome.value || '').trim() || null,
+            laudo: (exLaudo.value || '').trim(), // opcional; se vazio vira pendente
+            dataColeta: exDataColeta.value || null,
+            valoresReferencia: (exValoresRef.value || '').trim() || null
+        };
+        if (!payload.pacienteCpf || !payload.medicoCrm || !payload.tipoExame) {
+            return alert('Preencha CPF, CRM e tipo do exame. O laudo pode ser concluído depois.');
+        }
+        try {
+            const r = await fetch('http://localhost:3000/exames', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!r.ok) throw new Error(await r.text());
+            const data = await r.json();
+            exameResult.textContent = `Exame salvo: ID ${data?.exame?._id || '—'}`;
+            exameResult.style.display = 'block';
+            formExame.reset();
+            if (medicoObj?.crm && exMedicoCrm && !exMedicoCrm.value) exMedicoCrm.value = medicoObj.crm;
+            loadExamesPendentes();
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao salvar exame.');
+        }
+    });
+
+    // Função para concluir laudo (caso depois queira implementar lista e botão)
+    window.concluirLaudoExame = async (exameId, novoLaudo) => {
+        if (!exameId || !novoLaudo) return alert('Exame ou laudo ausente.');
+        try {
+            const r = await fetch(`http://localhost:3000/exames/${exameId}/laudo`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ laudo: novoLaudo }) });
+            if (!r.ok) throw new Error(await r.text());
+            const data = await r.json();
+            alert('Laudo concluído com sucesso.');
+            return data;
+        } catch (e) {
+            console.error(e);
+            alert('Erro ao concluir laudo.');
+        }
+    };
+
+    async function loadExamesPendentes() {
+        if (!exPendList || !medicoId) return;
+        exPendList.innerHTML = '<tr><td colspan="6">Carregando…</td></tr>';
+        try {
+            const r = await fetch(`http://localhost:3000/exames/medico/${medicoId}`);
+            const data = await r.json();
+            const arr = Array.isArray(data) ? data : (data.exames || []);
+            const pend = arr.filter(e => (e.status || (e.laudo ? 'concluido' : 'pendente')) === 'pendente');
+            if (!pend.length) { exPendList.innerHTML = '<tr class="empty-state"><td colspan="6">Nenhum exame pendente.</td></tr>'; return; }
+            exPendList.innerHTML = pend.map(e => `
+            <tr>
+                <td>${e.paciente?.nome || '—'}</td>
+                <td>${e.nomeExame || '—'}</td>
+                <td>${e.tipoExame || '—'}</td>
+                <td>${e.dataColeta ? new Date(e.dataColeta).toLocaleDateString() : '—'}</td>
+                <td><span class="badge badge-warning">Pendente</span></td>
+                <td><button type="button" class="btn btn-primary btn-small" data-exame="${e._id}">Laudar</button></td>
+              </tr>
+            `).join('');
+            // Bind buttons
+            exPendList.querySelectorAll('button[data-exame]').forEach(btn => {
+                btn.addEventListener('click', () => openLaudoModal(pend.find(x => x._id === btn.getAttribute('data-exame'))));
+            });
+        } catch (err) {
+            console.error(err);
+            exPendList.innerHTML = '<tr><td colspan="6">Erro ao carregar.</td></tr>';
+        }
+    }
+
+    function openLaudoModal(exame) {
+        if (!exame || !modalLaudo) return;
+        laudoExameId.value = exame._id;
+        laudoPaciente.value = exame.paciente?.nome || '—';
+        laudoNomeExame.value = exame.nomeExame || exame.tipoExame || '—';
+        laudoJustificativa.value = exame.justificativa || '';
+        laudoDescricaoDetalhada.value = exame.descricaoDetalhada || '';
+        laudoDiscussao.value = exame.discussao || '';
+        laudoConclusao.value = exame.conclusao || '';
+        laudoAnalista.value = exame.analistaResponsavel || '';
+        laudoDiretor.value = exame.diretorTecnico || '';
+        laudoLocalNome.value = exame.localNome || '';
+        laudoLocalEndereco.value = exame.localEndereco || '';
+        laudoValoresReferencia.value = exame.valoresReferencia || '';
+        laudoTextoLivre.value = exame.laudo || '';
+        laudoStatus.style.display = 'none';
+        modalLaudo.style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeLaudoModal() {
+        if (modalLaudo) modalLaudo.style.display = 'none';
+    }
+    laudoClose?.addEventListener('click', closeLaudoModal);
+    laudoCancel?.addEventListener('click', closeLaudoModal);
+    modalLaudo?.addEventListener('click', (e) => { if (e.target === modalLaudo) closeLaudoModal(); });
+
+    formLaudo?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!laudoExameId.value) return alert('Exame não identificado.');
+        if (!laudoDescricaoDetalhada.value.trim() && !laudoConclusao.value.trim() && !laudoTextoLivre.value.trim()) {
+            return alert('Preencha ao menos Descrição Detalhada, Conclusão ou Laudo Texto Livre.');
+        }
+        const payload = {
+            justificativa: laudoJustificativa.value.trim() || null,
+            descricaoDetalhada: laudoDescricaoDetalhada.value.trim() || null,
+            discussao: laudoDiscussao.value.trim() || null,
+            conclusao: laudoConclusao.value.trim() || null,
+            analistaResponsavel: laudoAnalista.value.trim() || null,
+            diretorTecnico: laudoDiretor.value.trim() || null,
+            valoresReferencia: laudoValoresReferencia.value.trim() || null,
+            laudo: laudoTextoLivre.value.trim() || null,
+            localNome: laudoLocalNome.value.trim() || null,
+            localEndereco: laudoLocalEndereco.value.trim() || null
+        };
+        try {
+            const r = await fetch(`http://localhost:3000/exames/${laudoExameId.value}/laudo`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!r.ok) throw new Error(await r.text());
+            laudoStatus.textContent = 'Laudo concluído com sucesso.';
+            laudoStatus.style.display = 'block';
+            setTimeout(() => { closeLaudoModal(); loadExamesPendentes(); }, 800);
+        } catch (err) {
+            console.error(err);
+            laudoStatus.textContent = 'Erro ao salvar laudo.';
+            laudoStatus.style.display = 'block';
+            laudoStatus.classList.remove('success');
+        }
+    });
 })();

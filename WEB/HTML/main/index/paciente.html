@@ -7,15 +7,20 @@
     <title>Área do Paciente - Sky Health</title>
     <link rel="stylesheet" href="../../../CSS/style.css" />
     <link rel="stylesheet" href="../../../CSS/main/index/style.css" />
+    <link rel="stylesheet" href="../../../CSS/main/index/paciente-theme.css" />
+    <link rel="stylesheet" href="../../../CSS/main/index/paciente-theme-dark.css" />
 </head>
 
 <body>
     <header>
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon" role="img" aria-label="Sky Health"></div>
+                <div class="logo-brand" role="img" aria-label="Sky Health"></div>
                 <h1>Área do Paciente</h1>
             </div>
+            <nav>
+                <!-- Navegação futura -->
+            </nav>
         </div>
     </header>
 
@@ -30,6 +35,8 @@
                         <button data-tab="prescricoes" class="active">Minhas Prescrições</button>
                         <button data-tab="agendamentos">Meus Agendamentos</button>
                         <button data-tab="notificacoes">Notificações</button>
+                        <button data-tab="exames">Resultados de Exames</button>
+                        <button data-tab="historico">Histórico Médico</button>
                     </nav>
                 </aside>
                 <section class="content card">
@@ -124,6 +131,66 @@
                                 <small class="muted">Eventos importantes serão exibidos aqui.</small>
                             </div>
                         </section>
+
+                        <!-- Resultados de Exames -->
+                        <section id="tab-exames" class="tab-panel">
+                            <h4 class="section-title">Resultados / Laudos de Exames</h4>
+                            <div class="panel-header">
+                                <h3>Meus Exames</h3>
+                                <div class="controls">
+                                    <div class="form-group">
+                                        <label for="ex-search">Buscar</label>
+                                        <input id="ex-search" type="search" placeholder="Tipo, nome, médico..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Exportações removidas aqui: agora disponíveis individualmente dentro do modal -->
+                            <table class="list">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Nome</th>
+                                        <th>Status</th>
+                                        <th>Data Resultado</th>
+                                        <th>Médico</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ex-list">
+                                    <tr class="empty-state">
+                                        <td colspan="6">Carregando…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="ex-msg" class="alert success" style="display:none;"></div>
+                        </section>
+
+                        <!-- Histórico Médico Consolidado -->
+                        <section id="tab-historico" class="tab-panel">
+                            <h4 class="section-title">Histórico Médico Consolidado</h4>
+                            <p class="muted">Gere e exporte um dossiê completo com seus dados e registros.</p>
+                            <div class="form-actions" style="gap:.5rem;display:flex;flex-wrap:wrap;">
+                                <button id="hist-refresh" type="button" class="btn btn-secondary">Atualizar
+                                    Histórico</button>
+                                <button id="hist-export-txt" type="button" class="btn btn-secondary">Exportar
+                                    TXT</button>
+                                <button id="hist-export-xml" type="button" class="btn btn-secondary">Exportar
+                                    XML</button>
+                                <button id="hist-export-json" type="button" class="btn btn-secondary">Exportar
+                                    JSON</button>
+                                <button id="hist-export-pdf" type="button" class="btn btn-primary">Exportar / Imprimir
+                                    (PDF)</button>
+                            </div>
+                            <div id="hist-status" class="alert success" style="display:none;margin-top:1rem;"></div>
+                            <div id="hist-conteudo" class="card"
+                                style="margin-top:1rem; max-height:400px; overflow:auto; padding:1rem; font-size:.9rem; line-height:1.35; white-space:pre-wrap; font-family:'Courier New',monospace; word-break:break-word;">
+                            </div>
+                            <div class="form-actions" style="margin-top:1rem;">
+                                <button id="hist-import" type="button" class="btn btn-outline">Importar HMC</button>
+                                <input id="hist-import-input" type="file" accept=".json,.xml,.txt"
+                                    style="display:none" />
+                            </div>
+                        </section>
                     </div>
                 </section>
             </div>
@@ -140,6 +207,115 @@
     <script src="../../../JS/link/paciente.js"></script>
     <script src="../../../JS/link/medico.js"></script>
     <script src="../../../JS/main/paciente-dashboard.js"></script>
+    <!-- Script de tema local removido para evitar conflito: uso central deve aplicar body[data-theme="dark"] ou body.dark-mode -->
+
+    <!-- Modal Visualização de Exame -->
+    <div id="modal-exame" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="mx-titulo">Exame</h3>
+                <button type="button" class="modal-close" id="mx-close" aria-label="Fechar">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="inline" style="flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem" id="mx-actions">
+                    <button type="button" class="btn btn-secondary btn-sm" id="mx-copy">Copiar</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="mx-exp-txt">TXT</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="mx-exp-json">JSON</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="mx-exp-xml">XML</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="mx-exp-pdf">Imprimir / PDF</button>
+                </div>
+                <div class="chips" id="mx-chips"></div>
+                <div class="grid-2">
+                    <div class="field-block">
+                        <h4>Tipo</h4>
+                        <div class="value" id="mx-tipo">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Nome Exame</h4>
+                        <div class="value" id="mx-nome">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Médico Solicitante</h4>
+                        <div class="value" id="mx-medico">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>CRM</h4>
+                        <div class="value" id="mx-crm">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Data Coleta</h4>
+                        <div class="value" id="mx-coleta">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Data Resultado</h4>
+                        <div class="value" id="mx-resultado">—</div>
+                    </div>
+                </div>
+                <div class="field-block">
+                    <h4>Valores de Referência</h4>
+                    <pre id="mx-ref">—</pre>
+                </div>
+                <div class="field-block">
+                    <h4>Justificativa</h4>
+                    <pre id="mx-justificativa">—</pre>
+                </div>
+                <div class="field-block">
+                    <h4>Descrição Detalhada</h4>
+                    <pre id="mx-descricao">—</pre>
+                </div>
+                <div class="field-block">
+                    <h4>Discussão</h4>
+                    <pre id="mx-discussao">—</pre>
+                </div>
+                <div class="field-block">
+                    <h4>Conclusão</h4>
+                    <pre id="mx-conclusao">—</pre>
+                </div>
+                <div class="field-block">
+                    <h4>Laudo (Texto Livre)</h4>
+                    <pre id="mx-laudo">—</pre>
+                </div>
+                <div class="grid-2">
+                    <div class="field-block">
+                        <h4>Analista Responsável</h4>
+                        <div class="value" id="mx-analista">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Diretor Técnico</h4>
+                        <div class="value" id="mx-diretor">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Local</h4>
+                        <div class="value" id="mx-local-nome">—</div>
+                    </div>
+                    <div class="field-block">
+                        <h4>Endereço Local</h4>
+                        <div class="value" id="mx-local-endereco">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview Importação HMC -->
+    <div id="modal-hmc" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;">
+        <div class="modal-box" style="max-width:900px;">
+            <div class="modal-header">
+                <h3 id="mhmc-titulo">Pré-visualização de Importação</h3>
+                <button type="button" class="modal-close" id="mhmc-close" aria-label="Fechar">×</button>
+            </div>
+            <div class="modal-body" style="display:flex;flex-direction:column;gap:1rem;">
+                <div id="mhmc-meta" class="muted"
+                    style="font-size:.75rem;letter-spacing:.5px;text-transform:uppercase;"></div>
+                <div class="modal-actions" style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                    <button type="button" class="btn btn-secondary btn-sm" id="mhmc-toggle">Mostrar completo</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="mhmc-confirm">Confirmar Importação</button>
+                    <button type="button" class="btn btn-outline btn-sm" id="mhmc-cancel">Cancelar</button>
+                </div>
+                <pre id="mhmc-preview" style="max-height:55vh;"></pre>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
