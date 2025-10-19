@@ -1,0 +1,212 @@
+/* ===== SKY HEALTH — Prescrição Digital Integrada ===== */
+
+/* RESET BÁSICO */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+body {
+  background-color: #f6f9ff;
+  color: #1b1b1b;
+  line-height: 1.6;
+  padding: 30px;
+}
+
+/* CABEÇALHO */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #1b4ed4, #4d8bff);
+  color: white;
+  padding: 18px 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+header .muted {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* CONTEÚDO */
+section.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  margin-top: 24px;
+}
+
+/* TÍTULOS */
+h3 {
+  color: #1b4ed4;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* FORMULÁRIOS */
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 14px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fafbff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #1b4ed4;
+  box-shadow: 0 0 0 3px rgba(27, 78, 212, 0.15);
+}
+
+/* LINHAS DE CAMPOS */
+.row {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.row > * {
+  flex: 1;
+}
+
+/* BOTÕES */
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:not(.secondary) {
+  background: #1b4ed4;
+  color: #fff;
+}
+
+button.secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* TABELAS */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #e3e3e3;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background: #eef3ff;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background: #fafbff;
+}
+
+/* LISTA DE MEDICAMENTOS */
+.list {
+  margin-top: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* CHIP DE STATUS */
+.chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chip.success {
+  background-color: #e3f6ec;
+  color: #18794e;
+}
+
+.chip.warning {
+  background-color: #fff4e5;
+  color: #a15c00;
+}
+
+.chip.info {
+  background-color: #e9f0ff;
+  color: #1b4ed4;
+}
+
+/* TEXTO AUXILIAR */
+.muted {
+  color: #666;
+  font-size: 14px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
