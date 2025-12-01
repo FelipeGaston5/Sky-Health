@@ -1,0 +1,71 @@
+/* ===== Layout Geral do Módulo ===== */
+
+.layout {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* ===== Sidebar ===== */
+
+.sidebar {
+    width: 300px;
+    background: var(--color-surface);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.sidebar h2 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.sidebar label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.sidebar select,
+.sidebar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-top: 4px;
+}
+
+/* ===== Mapa ===== */
+
+#mapa {
+    flex: 1;
+    height: calc(100vh - 150px);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* ===== Legenda ===== */
+
+.legenda {
+    margin-top: 20px;
+}
+
+.legenda p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cor {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.nivel1 { background: #a7f3d0; }
+.nivel2 { background: #facc15; }
+.nivel3 { background: #fb923c; }
+.nivel4 { background: #ef4444; }
