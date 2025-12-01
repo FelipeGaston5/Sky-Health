@@ -1,3 +1,36 @@
+//dark mode
+const body = document.body;
+const toggleBtn = document.getElementById('themeToggle');
+
+if (toggleBtn) {
+  const storedTheme = localStorage.getItem('theme') || 'light';
+  setTheme(storedTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const current = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  });
+}
+
+function setTheme(theme) {
+  if (theme === 'dark') {
+    body.setAttribute('data-theme', 'dark');
+    body.classList.add('dark-mode');
+    if (toggleBtn) {
+      toggleBtn.querySelector('.theme-toggle__label').textContent = 'Modo claro';
+      toggleBtn.querySelector('.theme-toggle__icon').textContent = '☀️';
+    }
+  } else {
+    body.setAttribute('data-theme', 'light');
+    body.classList.remove('dark-mode');
+    if (toggleBtn) {
+      toggleBtn.querySelector('.theme-toggle__label').textContent = 'Modo escuro';
+      toggleBtn.querySelector('.theme-toggle__icon').textContent = '🌙';
+    }
+  }
+  localStorage.setItem('theme', theme);
+}
 // Inicializar mapa 
 const mapa = L.map("mapa").setView([-8.05, -34.88], 12);
 
