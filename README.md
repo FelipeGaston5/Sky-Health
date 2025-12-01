@@ -4,7 +4,6 @@
 
 ### 👥 Autores
 
-- Arthur Vinicios Carvalho dos Santos
 - Camylle Mayara Torres de Almeida
 - Felipe Tadeu Paiva Gaston
 - Giovanna Lethicia Caxias Pereira da Silva
