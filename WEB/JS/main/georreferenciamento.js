@@ -148,5 +148,5 @@ document.getElementById("btnAplicar").addEventListener("click", aplicarFiltros);
     const dados = await resp.json();
 
     await carregarDoencas(dados);
-    aplicarFiltros(); // primeira carga
+    aplicarFiltros(); 
 })();
