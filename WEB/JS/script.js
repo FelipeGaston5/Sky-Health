@@ -121,7 +121,7 @@
                 let role = null;
                 try { role = localStorage.getItem('sessao_perfil'); } catch { }
                 // Direcionar para os dashboards principais
-                const map = { paciente: './HTML/main/index/paciente.html', medico: './HTML/main/index/medico.html', adm: './HTML/main/index/adm.html' };
+                const map = { paciente: './main/index/paciente.html', medico: './main/index/medico.html', adm: './main/index/adm.html' };
                 const target = role && map[role] ? map[role] : 'index.html';
                 const path = window.location.pathname.replace(/\\/g, '/');
                 const marker = '/HTML/';
