@@ -32,10 +32,9 @@ function setTheme(theme) {
   localStorage.setItem('theme', theme);
 }
 
-// ===================== GEOREFERENCIAMENTO (PACIENTES) =====================
+// ===================== GEOREFERENCIAMENTO (CONSULTAS) =====================
 
 // Bairros de Recife -> coordenadas aproximadas
-// Completae depois com todos os bairros utilizados no sistema
 const coordenadasBairros = {
   "Boa Viagem": { lat: -8.1265, lng: -34.9156 },
   "Ibura": { lat: -8.1415, lng: -34.9443 },
@@ -43,7 +42,7 @@ const coordenadasBairros = {
   "Santo Amaro": { lat: -8.0510, lng: -34.8800 },
   "Espinheiro": { lat: -8.0450, lng: -34.8950 },
   "Pina": { lat: -8.0891, lng: -34.8851 }
-  // TODO: adicionar outros bairros usados no Sky-Health
+  // Adicione aqui outros bairros usados no Sky-Health
 };
 
 // Vai guardar todos os registros no formato que o mapa usa
@@ -60,7 +59,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Grupo onde marcadores ficam
 const camadaMarcadores = L.layerGroup().addTo(mapa);
 
-// ==== Função: cor dinâmica por número de casos ====
+// ==== Função: cor dinâmica por número de consultas ====
 function corPorCasos(qtd) {
   if (qtd <= 20) return "#a7f3d0"; // baixo
   if (qtd <= 50) return "#facc15"; // moderado
@@ -68,67 +67,84 @@ function corPorCasos(qtd) {
   return "#ef4444"; // crítico
 }
 
-// ==== Buscar pacientes via API já existente (PacientesAPI) ====
-async function carregarPacientesDoBackend() {
-  if (!window.PacientesAPI || !window.PacientesAPI.listarPacientes) {
-    throw new Error('PacientesAPI.listarPacientes não está disponível. Verifique a ordem dos scripts.');
+// ==== Buscar CONSULTAS via API do backend ====
+// Depende de window.ConsultasAPI.listarConsultas() definido em consultas.js
+async function carregarConsultasDoBackend() {
+  if (!window.ConsultasAPI || !window.ConsultasAPI.listarConsultas) {
+    throw new Error('ConsultasAPI.listarConsultas não está disponível. Verifique consultas.js e a ordem dos scripts.');
   }
-  const lista = await window.PacientesAPI.listarPacientes();
 
-  // Pode vir como array simples ou dentro de { pacientes: [...] }
+  const lista = await window.ConsultasAPI.listarConsultas();
+
+  // Pode vir como array simples ou dentro de { agendamentos: [...] }
   if (Array.isArray(lista)) return lista;
-  if (Array.isArray(lista.pacientes)) return lista.pacientes;
+  if (Array.isArray(lista.agendamentos)) return lista.agendamentos;
   return [];
 }
 
-// ==== Transformar PACIENTE -> registros para o mapa ====
-// Cada doença crônica do paciente vira 1 registro
-function pacienteParaRegistrosGeo(paciente) {
-  const bairro = paciente.endereco?.bairro;
-  if (!bairro) return [];
+// ==== Transformar AGENDAMENTO/CONSULTA -> registro para o mapa ====
+// Cada consulta (agendamento) vira 1 registro
+function consultaParaRegistroGeo(agendamento) {
+  // Tenta descobrir o bairro em diferentes formatos comuns
+  const bairro =
+    agendamento?.paciente?.endereco?.bairro ||
+    agendamento?.paciente?.bairro ||
+    agendamento?.endereco?.bairro ||
+    agendamento?.bairro ||
+    null;
+
+  if (!bairro) return null;
 
   const coords = coordenadasBairros[bairro];
-  if (!coords) return []; // bairro sem coordenada cadastrado → ignorado
+  if (!coords) return null; // bairro sem coordenada cadastrada → ignora
 
-  const doencas = Array.isArray(paciente.doencasCronicas)
-    ? paciente.doencasCronicas
-    : [];
+  // Tipo de consulta: tenta vários campos comuns
+  const tipoConsulta =
+    agendamento.tipoConsulta ||
+    agendamento.tipo ||
+    agendamento.especialidade ||
+    "Consulta";
 
-  // Usa a data de criação do paciente como referência (ou vazio)
-  let dataBase = "";
-  if (paciente.criadoEm) {
+  // Data da consulta: tenta vários campos comuns
+  const dataBruta =
+    agendamento.dataConsulta ||
+    agendamento.data ||
+    agendamento.criadoEm ||
+    "";
+
+  let dataNormalizada = "";
+  if (dataBruta) {
     try {
-      dataBase = new Date(paciente.criadoEm).toISOString().slice(0, 10);
+      dataNormalizada = new Date(dataBruta).toISOString().slice(0, 10);
     } catch {
-      dataBase = "";
+      dataNormalizada = "";
     }
   }
 
-  // Gera um registro por doença crônica
-  return doencas.map(doenca => ({
+  return {
     bairro,
     lat: coords.lat,
     lng: coords.lng,
-    doenca,
-    casos: 1,
-    data: dataBase
-  }));
+    tipoConsulta,
+    casos: 1,          // cada consulta conta como 1 ocorrência
+    data: dataNormalizada
+  };
 }
 
-// ==== Preencher o <select> de doenças automaticamente ====
-function carregarDoencas(dados) {
-  const select = document.getElementById("selectDoenca");
+// ==== Preencher o <select> de tipos de consulta automaticamente ====
+function carregarTiposConsulta(dados) {
+  const select = document.getElementById("selectConsulta");
   if (!select) return;
 
   const lista = new Set();
   dados.forEach(reg => {
-    if (reg.doenca) lista.add(reg.doenca);
+    if (reg.tipoConsulta) lista.add(reg.tipoConsulta);
   });
 
   select.innerHTML = `<option value="todas">Todas</option>`;
 
-  lista.forEach(doenca => {
-    select.innerHTML += `<option value="${doenca}">${doenca}</option>`;
+  lista.forEach(tipo => {
+    select.innerHTML += `<option value="${tipo}">${tipo}</option>`;
   });
 }
 
@@ -153,21 +169,21 @@ function agruparPorBairro(dadosFiltrados) {
 
 // ==== Aplicar filtros e desenhar o mapa ====
 async function aplicarFiltros() {
-  // Carrega pacientes e gera registros base se ainda não foi feito
+  // Carrega consultas e gera registros base se ainda não foi feito
   if (!registrosBase.length) {
-    const pacientes = await carregarPacientesDoBackend();
-    registrosBase = pacientes
-      .flatMap(pacienteParaRegistrosGeo)
+    const consultas = await carregarConsultasDoBackend();
+    registrosBase = consultas
+      .map(consultaParaRegistroGeo)
       .filter(r => r !== null);
   }
 
-  const doencaSel = document.getElementById("selectDoenca")?.value || "todas";
+  const tipoSel = document.getElementById("selectConsulta")?.value || "todas";
   const inicio = document.getElementById("dataInicio")?.value || "";
   const fim = document.getElementById("dataFim")?.value || "";
 
   // Filtragem dinâmica
   const filtrados = registrosBase.filter(reg => {
-    if (doencaSel !== "todas" && reg.doenca !== doencaSel) return false;
+    if (tipoSel !== "todas" && reg.tipoConsulta !== tipoSel) return false;
     if (inicio && reg.data && reg.data < inicio) return false;
     if (fim && reg.data && reg.data > fim) return false;
     return true;
@@ -193,7 +209,7 @@ async function aplicarFiltros() {
 
     marker.bindPopup(`
       <strong>Bairro:</strong> ${b.bairro}<br>
-      <strong>Casos totais:</strong> ${b.total}
+      <strong>Consultas no período:</strong> ${b.total}
     `);
 
     marker.addTo(camadaMarcadores);
@@ -208,19 +224,27 @@ async function aplicarFiltros() {
 
 // Botão "Aplicar filtros"
 const btnAplicar = document.getElementById("btnAplicar");
-btnAplicar?.addEventListener("click", aplicarFiltros);
+if (btnAplicar) {
+  btnAplicar.addEventListener("click", async () => {
+    try {
+      await aplicarFiltros();
+    } catch (e) {
+      console.error("Erro ao aplicar filtros:", e);
+    }
+  });
+}
 
 // ==== Inicialização ====
 (async () => {
   try {
-    const pacientes = await carregarPacientesDoBackend();
+    const consultas = await carregarConsultasDoBackend();
 
-    registrosBase = pacientes
-      .flatMap(pacienteParaRegistrosGeo)
+    registrosBase = consultas
+      .map(consultaParaRegistroGeo)
       .filter(r => r !== null);
 
-    carregarDoencas(registrosBase);
-    aplicarFiltros();
+    carregarTiposConsulta(registrosBase);
+    await aplicarFiltros();
   } catch (e) {
     console.error('Erro ao inicializar georreferenciamento:', e);
   }
